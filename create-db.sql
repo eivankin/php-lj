@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `Tag`
     PRIMARY KEY (`id`)
     );
 
-CREATE TABLE IF NOT EXISTS `BlogEntry`
+CREATE TABLE IF NOT EXISTS `Blog_Entry`
 (
     `id`        int NOT NULL AUTO_INCREMENT ,
     `title`     varchar(256) NOT NULL UNIQUE ,
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `BlogEntry`
     CONSTRAINT `FK_24` FOREIGN KEY `FK_26` (`author_id`) REFERENCES `User` (`id`)
     );
 
-CREATE TABLE IF NOT EXISTS `EntryAttachement`
+CREATE TABLE IF NOT EXISTS `Entry_Attachment`
 (
     `id`       int NOT NULL AUTO_INCREMENT ,
     `type`     int NOT NULL ,
@@ -48,22 +48,22 @@ CREATE TABLE IF NOT EXISTS `EntryAttachement`
 
     PRIMARY KEY (`id`),
     KEY `FK_74` (`entry_id`),
-    CONSTRAINT `FK_72` FOREIGN KEY `FK_74` (`entry_id`) REFERENCES `BlogEntry` (`id`)
+    CONSTRAINT `FK_72` FOREIGN KEY `FK_74` (`entry_id`) REFERENCES `Blog_Entry` (`id`)
     );
 
-CREATE TABLE IF NOT EXISTS `EntryToPermission`
+CREATE TABLE IF NOT EXISTS `Entry_To_Permission`
 (
     `entry_id`      int NOT NULL ,
     `permission_id` int NOT NULL ,
 
     PRIMARY KEY (`entry_id`, `permission_id`),
     KEY `FK_43` (`entry_id`),
-    CONSTRAINT `FK_41` FOREIGN KEY `FK_43` (`entry_id`) REFERENCES `BlogEntry` (`id`),
+    CONSTRAINT `FK_41` FOREIGN KEY `FK_43` (`entry_id`) REFERENCES `Blog_Entry` (`id`),
     KEY `FK_50` (`permission_id`),
     CONSTRAINT `FK_48` FOREIGN KEY `FK_50` (`permission_id`) REFERENCES `Permission` (`id`)
     );
 
-CREATE TABLE IF NOT EXISTS `EntryToTag`
+CREATE TABLE IF NOT EXISTS `Entry_To_Tag`
 (
     `tag_id`   int NOT NULL ,
     `entry_id` int NOT NULL ,
@@ -72,10 +72,10 @@ CREATE TABLE IF NOT EXISTS `EntryToTag`
     KEY `FK_62` (`tag_id`),
     CONSTRAINT `FK_60` FOREIGN KEY `FK_62` (`tag_id`) REFERENCES `Tag` (`id`),
     KEY `FK_66` (`entry_id`),
-    CONSTRAINT `FK_64` FOREIGN KEY `FK_66` (`entry_id`) REFERENCES `BlogEntry` (`id`)
+    CONSTRAINT `FK_64` FOREIGN KEY `FK_66` (`entry_id`) REFERENCES `Blog_Entry` (`id`)
     );
 
-CREATE TABLE IF NOT EXISTS `EntryView`
+CREATE TABLE IF NOT EXISTS `Entry_View`
 (
     `user_id`  int NOT NULL ,
     `entry_id` int NOT NULL ,
@@ -85,10 +85,10 @@ CREATE TABLE IF NOT EXISTS `EntryView`
     KEY `FK_35` (`user_id`),
     CONSTRAINT `FK_33` FOREIGN KEY `FK_35` (`user_id`) REFERENCES `User` (`id`),
     KEY `FK_39` (`entry_id`),
-    CONSTRAINT `FK_37` FOREIGN KEY `FK_39` (`entry_id`) REFERENCES `BlogEntry` (`id`)
+    CONSTRAINT `FK_37` FOREIGN KEY `FK_39` (`entry_id`) REFERENCES `Blog_Entry` (`id`)
     );
 
-CREATE TABLE IF NOT EXISTS `UserToPermission`
+CREATE TABLE IF NOT EXISTS `User_To_Permission`
 (
     `user_id`       int NOT NULL ,
     `permission_id` int NOT NULL ,
