@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `Permission`
 CREATE TABLE IF NOT EXISTS `User`
 (
     `id`            int NOT NULL AUTO_INCREMENT ,
+    `username`      varchar(256) NOT NULL UNIQUE ,
     `email`         varchar(256) NOT NULL UNIQUE ,
     `password_hash` varbinary(60) NOT NULL ,
     `last_login`    datetime NULL ,
