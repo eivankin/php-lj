@@ -67,6 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
 } elseif (isset($_SESSION['restore_token'])) {
     $message = 'Код для сброса пароля отправлен на указанную почту';
     $content = TOKEN_FORM;
+} elseif (isset($_SESSION['restore_id'])) {
+    $content = PSWD_FORM;
 }
 
 $title = 'Восстановление пароля';
