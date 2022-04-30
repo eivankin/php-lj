@@ -47,9 +47,28 @@ function get_user(int $id): array
     return $query->get_result()->fetch_assoc();
 }
 
-function update_last_login(int $id) {
+function update_last_login(int $id)
+{
     $db = get_connection();
     $query = $db->prepare('UPDATE user SET last_login = NOW() WHERE id = ?');
     $query->bind_param('i', $id);
+    $query->execute();
+}
+
+function get_by_email(string $email)
+{
+    $db = get_connection();
+    $query = $db->prepare('SELECT id FROM user WHERE email = ?');
+    $query->bind_param('s', $email);
+    $query->execute();
+
+    return $query->get_result()->fetch_assoc()['id'];
+}
+
+function set_password(int $id, string $password) {
+    $db = get_connection();
+    $query = $db->prepare('UPDATE user SET password_hash = ? WHERE id = ?');
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+    $query->bind_param('si', $password_hash, $id);
     $query->execute();
 }
