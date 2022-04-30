@@ -37,8 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
             $_SESSION['restore_token'] = random_int(100000, 999999);
             $_SESSION['restore_id'] = $user_id;
             mail($_POST['email'], 'Восстановление пароля на сайте ' . $_SERVER['HTTP_HOST'],
-                'Для сброса пароля введите код ' . $_SESSION['restore_token'] . ' в соответсвующей форме. 
-                Если вы не запрашивали сброс пароля, то проигнорируйте данное письмо.');
+                'Для сброса пароля введите код ' . $_SESSION['restore_token'] . ' в соответсвующей форме. ' .
+                'Если вы не запрашивали сброс пароля, то проигнорируйте данное письмо.');
 
             $content = TOKEN_FORM;
         } catch (Exception $e) {
