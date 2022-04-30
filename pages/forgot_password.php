@@ -33,12 +33,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
         $message = 'Пользователь с таким e-mail не найден';
     else {
         $message = 'Код для сброса пароля отправлен на указанную почту';
-        $_SESSION['restore_token'] = random_int(100000, 999999);
-        $_SESSION['restore_id'] = $user_id;
-        mail($_POST['email'], 'Восстановление пароля на сайте ' . $_SERVER['HTTP_HOST'],
-            'Для сброса пароля введите код ' . $_SESSION['restore_token'] . ' в соответсвующей форме');
+        try {
+            $_SESSION['restore_token'] = random_int(100000, 999999);
+            $_SESSION['restore_id'] = $user_id;
+            mail($_POST['email'], 'Восстановление пароля на сайте ' . $_SERVER['HTTP_HOST'],
+                'Для сброса пароля введите код ' . $_SESSION['restore_token'] . ' в соответсвующей форме');
 
-        $content = TOKEN_FORM;
+            $content = TOKEN_FORM;
+        } catch (Exception $e) {
+            $message = 'Невозможно восстановить пароль, пожалуйста, свяжиетсь с администратором для сброса пароля вручную.';
+        }
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['token']) && isset($_SESSION['restore_token'])) {
     if ($_POST['token'] != $_SESSION['restore_token']) {
