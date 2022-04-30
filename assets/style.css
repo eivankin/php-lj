@@ -34,4 +34,7 @@ ul#menu > li > a:hover {
 button {
     background-color: rgb(0, 153, 204);
     color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
 }

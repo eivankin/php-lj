@@ -12,7 +12,7 @@
 </head>
 <body>
 <header>
-    <img src="/assets/logo.svg" width="40" height="40">
+    <img src="/assets/logo.svg" width="40" height="40" alt="Логотип">
     <nav>
         <ul id="menu">
             <li><a href="/">Главная</a></li>
