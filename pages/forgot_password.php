@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
         $content = PSWD_FORM;
     } else {
         set_password($_SESSION['restore_id'], $_POST['password']);
+        unset($_SESSION['restore_id']);
         $message = 'Новый пароль успешно задан, вход на сайт по нему доступен';
         mail($_POST['email'], 'Пароль на сайте ' . $_SERVER['HTTP_HOST'] . ' изменён',
             'Пароль для входа на сайт был успешно изменён.');
