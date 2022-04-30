@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login']) && isset($_PO
 
 $title = 'Вход на сайт';
 $content = '
-<form action="/login" method="post">
+<form method="post">
     <div>
         <label for="login">Логин</label>
         <input type="text" name="login" id="login" required>
@@ -29,6 +29,9 @@ $content = '
     </div>
     
     <button type="submit">Войти</button>
-</form>';
+</form>
+<p>
+<a href="/forgot-password">Забыли пароль?</a>
+</p>';
 
 require_once 'pages/base.php';

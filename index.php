@@ -7,7 +7,8 @@ $urls = array(
     '/login' => 'pages/login.php',
     '/account' => 'pages/account.php',
     '/logout' => 'pages/logout.php',
-    '/' => 'pages/index.php'
+    '/' => 'pages/index.php',
+    '/forgot-password' => 'pages/forgot_password.php'
 );
 
 if (isset($urls[$_SERVER['REQUEST_URI']])) {
