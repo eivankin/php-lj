@@ -10,7 +10,7 @@ function get_connection(): mysqli {
     );
 
     if ($db->connect_error) {
-        die("Connection failed: " . $db->connect_error);
+        die("Не удалось подключиться к базе данных: " . $db->connect_error);
     }
 
     return $db;
