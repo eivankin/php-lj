@@ -15,7 +15,7 @@ const PSWD_FORM = '
 const TOKEN_FORM = '
 <form method="post">
     <div>
-        <label for="token">Код для сброса пароля</label>
+        <label for="token">Код</label>
         <input type="text" id="token" name="token" required>
     </div>
     <button type="submit">Сбросить пароль</button>
@@ -64,6 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
         mail($_POST['email'], 'Пароль на сайте ' . $_SERVER['HTTP_HOST'] . ' изменён',
             'Пароль для входа на сайт был успешно изменён.');
     }
+} elseif (isset($_SESSION['restore_token'])) {
+    $message = 'Код для сброса пароля отправлен на указанную почту';
+    $content = TOKEN_FORM;
 }
 
 $title = 'Восстановление пароля';

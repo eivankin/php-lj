@@ -33,7 +33,7 @@
 <main>
     <?php
     if (isset($message))
-        echo '<p>' . $message . '</p>';
+        echo '<div class="message fixed-width"><div>' . $message . '</div></div>';
 
     if (isset($content))
         echo $content;

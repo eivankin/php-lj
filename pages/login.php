@@ -30,7 +30,7 @@ $content = '
     
     <button type="submit">Войти</button>
 </form>
-<p>
+<p class="fixed-width">
 <a href="/forgot-password">Забыли пароль?</a>
 </p>';
 
