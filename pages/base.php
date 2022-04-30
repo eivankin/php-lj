@@ -15,16 +15,16 @@
     <img src="/assets/logo.svg" width="40" height="40" alt="Логотип">
     <nav>
         <ul id="menu">
-            <li><a href="/">Главная</a></li>
-            <li><a href="/users">Пользователи</a></li>
-            <li><a href="/entries">Публикации</a></li>
+            <li><a class="white" href="/">Главная</a></li>
+            <li><a class="white" href="/users">Пользователи</a></li>
+            <li><a class="white" href="/entries">Публикации</a></li>
             <?php
             if (isset($_SESSION['user_id'])) {
-                echo '<li><a href="/account">Личный кабинет</a></li>
-                <li><a href="/logout">Выйти</a></li>';
+                echo '<li><a class="white" href="/account">Личный кабинет</a></li>
+                <li><a class="white" href="/logout">Выйти</a></li>';
             } else {
-                echo '<li><a href="/login">Войти</a></li>
-                <li><a href="/register">Зарегистрироваться</a></li>';
+                echo '<li><a class="white" href="/login">Войти</a></li>
+                <li><a class="white" href="/register">Зарегистрироваться</a></li>';
             }
             ?>
         </ul>
@@ -40,7 +40,11 @@
     ?>
 </main>
 <footer>
-    &copy; 2022
+    <p><a class="white" href="#menu">↑ Наверх</a></p>
+    <p>Связаться с администратором: <a class="white" href="mailto:webmaster@<?php echo $_SERVER['HTTP_HOST'] ?>">
+            webmaster@<?php echo $_SERVER['HTTP_HOST'] ?></a></p>
+    <hr>
+    <p>&copy; 2022</p>
 </footer>
 </body>
 </html>
