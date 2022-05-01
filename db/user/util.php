@@ -66,3 +66,12 @@ function set_password(int $id, string $password) {
     $query->bind_param('si', $password_hash, $id);
     $query->execute();
 }
+
+function delete_user(int $id): bool {
+    get_connection()->begin_transaction();
+    $query = get_connection()->prepare('DELETE FROM user WHERE id = ?');
+    $query->bind_param('i', $id);
+    $result = $query->execute();
+    get_connection()->commit();
+    return $result;
+}
