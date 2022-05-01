@@ -1,4 +1,6 @@
 <?php
+require_once 'db/user/util.php';
+
 if (isset($_SESSION['user_id'])) {
     header('Location: /account');
     exit();

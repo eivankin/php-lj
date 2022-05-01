@@ -16,8 +16,8 @@
         <ul class="menu">
             <li><img src="/assets/logo.svg" width="40" height="40" alt="Логотип"></li>
             <li><a class="white" href="/">Главная</a></li>
-            <li><a class="white" href="/users">Пользователи</a></li>
-            <li><a class="white" href="/entries">Публикации</a></li>
+            <li><a class="white" href="/users/">Пользователи</a></li>
+            <li><a class="white" href="/entries/">Публикации</a></li>
         </ul>
     </nav>
     <nav>
