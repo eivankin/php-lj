@@ -27,6 +27,7 @@ $urls = array(
     '/entries/' => 'pages/entries/list.php',
     '/entries/new' => 'pages/entries/new.php',
     '/users/' => 'pages/users/list.php',
+    '/users/new' =>  'pages/users/new.php',
 );
 
 if (isset($urls[$_SERVER['REQUEST_URI']])) {

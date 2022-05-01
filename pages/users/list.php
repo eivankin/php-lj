@@ -4,7 +4,11 @@ $title = 'Пользователи';
 $is_admin = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], ADMIN);
 $is_moderator = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], MODERATOR);
 
-$content = '<table><thead><tr>
+$content = '';
+if ($is_admin)
+    $content .= '<a href="./new">Добавить пользователя</a>';
+
+$content .= '<table><thead><tr>
 <th>№</th><th>Имя пользователя</th><th>Последний вход на сайт</th><th>Действия</th>
 </tr></thead><tbody>';
 $db = get_connection();

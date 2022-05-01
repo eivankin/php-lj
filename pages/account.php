@@ -1,8 +1,8 @@
 <?php
-login_required('/account');
-
 require_once 'db/user/util.php';
 require_once 'db/permission/built-in.php';
+
+login_required('/account');
 
 $title = 'Личный кабинет';
 $content = json_encode(get_user($_SESSION['user_id']));
