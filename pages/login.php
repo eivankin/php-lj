@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login']) && isset($_PO
     if ($user_id !== -1) {
         $_SESSION['user_id'] = $user_id;
         header('Location: /account');
+        unset($_SESSION['restore_token']);
+        unset($_SESSION['restore_id']);
         exit();
     }
     else
