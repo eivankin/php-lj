@@ -1,5 +1,20 @@
 <?php
 
+function handle_url_with_id(array $urls, array $matches, int $id_group = 1, int $action_position = 3) {
+    $id = $matches[$id_group];
+    $action = explode('/', $_SERVER['REQUEST_URI'])[$action_position];
+
+    if (!isset($action)) {
+        require_once $urls[0];
+        exit();
+    }
+
+    if (isset($urls[$action])) {
+        require_once $urls[$action];
+        exit();
+    }
+}
+
 session_start();
 
 $urls = array(
@@ -18,43 +33,17 @@ if (isset($urls[$_SERVER['REQUEST_URI']])) {
     exit();
 }
 if (preg_match('/\/users\/(\d+).*/', $_SERVER['REQUEST_URI'], $matches)) {
-    $user_urls = array(
+    handle_url_with_id(array('pages/users/show.php',
         'subscribe' => 'pages/users/subscribe.php',
         'ban' => 'pages/users/ban.php',
         'unban' => 'pages/users/unban.php',
-        'permissions' => 'pages/users/permissions.php'
-    );
-    $user_id = $matches[1];
-    $action = explode('/', $_SERVER['REQUEST_URI'])[3];
-
-    if (!isset($action)) {
-        require_once 'pages/users/show.php';
-        exit();
-    }
-
-    if (isset($user_urls[$action])) {
-        require_once $user_urls[$action];
-        exit();
-    }
+        'permissions' => 'pages/users/permissions.php'), $matches);
 }
 
 if (preg_match('/\/entries\/(\d+).*/', $_SERVER['REQUEST_URI'], $matches)) {
-    $entry_urls = array(
+    handle_url_with_id(array('pages/entries/show.php',
         'delete' => 'pages/entries/delete.php',
-        'permissions' => 'pages/entries/permissions.php'
-    );
-    $entry_id = $matches[1];
-    $action = explode('/', $_SERVER['REQUEST_URI'])[3];
-
-    if (!isset($action)) {
-        require_once 'pages/entries/show.php';
-        exit();
-    }
-
-    if (isset($entry_urls[$action])) {
-        require_once $entry_urls[$action];
-        exit();
-    }
+        'permissions' => 'pages/entries/permissions.php'), $matches);
 }
 
 
