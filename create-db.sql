@@ -7,6 +7,18 @@ CREATE TABLE IF NOT EXISTS `Permission`
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE IF NOT EXISTS `Category`
+(
+    `id`        int          NOT NULL AUTO_INCREMENT,
+    `name`      varchar(256) NOT NULL UNIQUE,
+    `parent_id` int          NULL,
+
+    KEY (`parent_id`),
+    CONSTRAINT FOREIGN KEY (`parent_id`) REFERENCES `Category` (`id`),
+
+    PRIMARY KEY (`id`)
+);
+
 CREATE TABLE IF NOT EXISTS `User`
 (
     `id`            int           NOT NULL AUTO_INCREMENT,
@@ -102,16 +114,4 @@ CREATE TABLE IF NOT EXISTS `User_To_Permission`
     CONSTRAINT FOREIGN KEY (`user_id`) REFERENCES `User` (`id`),
     KEY (`permission_id`),
     CONSTRAINT FOREIGN KEY (`permission_id`) REFERENCES `Permission` (`id`)
-);
-
-CREATE TABLE IF NOT EXISTS `Category`
-(
-    `id`        int          NOT NULL AUTO_INCREMENT,
-    `name`      varchar(256) NOT NULL UNIQUE,
-    `parent_id` int          NULL,
-
-    KEY (`parent_id`),
-    CONSTRAINT FOREIGN KEY (`parent_id`) REFERENCES `Category` (`id`),
-
-    PRIMARY KEY (`id`)
 );
