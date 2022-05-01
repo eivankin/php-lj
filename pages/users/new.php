@@ -1,9 +1,13 @@
 <?php
 require_once 'pages/util.php';
 require_once 'db/user/util.php';
+require_once 'db/permission/built-in.php';
 login_required('/users/new');
+
 $title = 'Создание пользователя';
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email']) &&
+if (!has_permission($_SESSION['user_id'], ADMIN)) {
+    $message = 'У вас нет прав на создание пользователей';
+} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email']) &&
     isset($_POST['login']) && isset($_POST['password'])) {
     $message = create_user($_POST['email'], $_POST['login'], $_POST['password']);
 } else {
