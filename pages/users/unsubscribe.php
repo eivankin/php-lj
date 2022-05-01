@@ -9,9 +9,9 @@ if (!isset($id))
 handle_page_with_id($id, 'users', '/subscribe');
 $permission_id = get_or_create_permission('subscription_' . $id, 'Подписка на пользователя с ID ' . $id);
 if (has_permission($_SESSION['user_id'], $permission_id)) {
-    $message = 'Вы уже подписаны на этого пользователя';
+    remove_permission_from_user($_SESSION['user_id'], $permission_id);
+    $message = 'Вы успешно отписались от выбранного пользователя';
 } else {
-    add_permission_to_user($_SESSION['user_id'], $permission_id);
-    $message = 'Вы успешно подписались на выбранного пользователя';
+    $message = 'Вы не подписаны на выбранного пользователя';
 }
 require_once 'pages/base.php';

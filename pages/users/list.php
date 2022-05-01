@@ -9,18 +9,19 @@ $content = '<table><thead><tr>
 </tr></thead><tbody>';
 $db = get_connection();
 $index = 0;
-foreach ($db->query('SELECT id, username, last_login FROM user')->fetch_all() as $user) {
-    $actions = '<a href="./' . $user[0] . '/subscribe">Подписаться</a>';
+foreach ($db->query('SELECT id, username, last_login FROM user')->fetch_all(MYSQLI_ASSOC) as $user) {
+    $actions = '<a href="./' . $user['id'] . '/subscribe">Подписаться</a>' .
+        ' | <a href="./' . $user['id'] . '/unsubscribe">Отписаться</a>';
     if ($is_moderator)
-        $actions .= ' | <a href="./' . $user[0] . '/ban">Запретить создавать публикации</a>' .
-            ' | <a href="./' . $user[0] . '/unban">Разрешить создавать публикации</a>';
+        $actions .= ' | <a href="./' . $user['id'] . '/ban">Запретить создавать публикации</a>' .
+            ' | <a href="./' . $user['id'] . '/unban">Разрешить создавать публикации</a>';
     if ($is_admin) {
-        $actions .= ' | <a href="./' . $user[0] . '/permissions">Управлять правами</a>' .
-            ' | <a href="./' . $user[0] . '/delete">Удалить</a>';
+        $actions .= ' | <a href="./' . $user['id'] . '/permissions">Управлять правами</a>' .
+            ' | <a href="./' . $user['id'] . '/delete">Удалить</a>';
     }
 
-    $content .= '<tr><td>' . ++$index . '</td><td><a href="./' . $user[0] . '">' . $user[1] .
-        '</a></td><td>' . $user[2] . '</td><td>' . $actions .  '</td></tr>';
+    $content .= '<tr><td>' . ++$index . '</td><td><a href="./' . $user['id'] . '">' . $user['username'] .
+        '</a></td><td>' . $user['last_login'] . '</td><td>' . $actions .  '</td></tr>';
 }
 $content .= '</tbody></table>';
 

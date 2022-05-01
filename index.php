@@ -1,4 +1,5 @@
 <?php
+require_once 'pages/util.php';
 
 function handle_url_with_id(array $urls, array $matches, int $id_group = 1, int $action_position = 3) {
     $id = $matches[$id_group];
@@ -35,6 +36,7 @@ if (isset($urls[$_SERVER['REQUEST_URI']])) {
 if (preg_match('/\/users\/(\d+).*/', $_SERVER['REQUEST_URI'], $matches)) {
     handle_url_with_id(array('pages/users/show.php',
         'subscribe' => 'pages/users/subscribe.php',
+        'unsubscribe' => 'pages/users/unsubscribe.php',
         'ban' => 'pages/users/ban.php',
         'unban' => 'pages/users/unban.php',
         'permissions' => 'pages/users/permissions.php'), $matches);
@@ -47,5 +49,4 @@ if (preg_match('/\/entries\/(\d+).*/', $_SERVER['REQUEST_URI'], $matches)) {
 }
 
 
-http_response_code(404);
-require_once 'pages/404.php';
+not_found();

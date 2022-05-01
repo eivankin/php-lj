@@ -10,7 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login']) && isset($_PO
     $user_id = authorize($_POST['login'], $_POST['password']);
     if ($user_id !== -1) {
         $_SESSION['user_id'] = $user_id;
-        header('Location: /account');
+        if (isset($_SESSION['redirect_after_login'])) {
+            header('Location: ' . $_SESSION['redirect_after_login']);
+            unset($_SESSION['redirect_after_login']);
+        } else
+            header('Location: /account');
         unset($_SESSION['restore_token']);
         unset($_SESSION['restore_id']);
         exit();
