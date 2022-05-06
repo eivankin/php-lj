@@ -2,9 +2,6 @@
 require_once 'db/blog_entry/util.php';
 $title = 'Публикации';
 $content = '
-<a href="./new">Добавить публикацию</a>
+<a href="./new"><button>Добавить публикацию</button></a>
 ';
-
-//foreach (get_all_entries() as $entry)
-//    $content .= json_encode($entry) . '<br>';
 require_once 'pages/base.php';

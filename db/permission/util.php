@@ -76,3 +76,12 @@ function get_all_permissions(): array
 {
     return get_connection()->query('SELECT * FROM permission')->fetch_all(MYSQLI_ASSOC);
 }
+
+function get_subscribers_count(int $user_id): int {
+    $query = get_connection()->prepare('SELECT COUNT(*) as count FROM user_to_permission WHERE permission_id = ?');
+    $query->bind_param('i',
+        get_connection()->query("SELECT id FROM permission WHERE internal_name = 'subscription_{$user_id}'")
+            ->fetch_assoc()['id']);
+    $query->execute();
+    return $query->get_result()->fetch_assoc()['count'];
+}
