@@ -11,10 +11,10 @@ CREATE TABLE IF NOT EXISTS `Category`
 (
     `id`        int          NOT NULL AUTO_INCREMENT,
     `name`      varchar(256) NOT NULL UNIQUE,
-    `parent_id` int          NULL,
+    `parent_id` int DEFAULT NULL,
 
     KEY (`parent_id`),
-    CONSTRAINT FOREIGN KEY (`parent_id`) REFERENCES `Category` (`id`),
+    FOREIGN KEY (`parent_id`) REFERENCES `Category` (`id`) ON DELETE CASCADE,
 
     PRIMARY KEY (`id`)
 );
@@ -51,8 +51,8 @@ CREATE TABLE IF NOT EXISTS `Blog_Entry`
     PRIMARY KEY (`id`),
     KEY (`author_id`),
     KEY (`category_id`),
-    CONSTRAINT FOREIGN KEY (`author_id`) REFERENCES `User` (`id`),
-    CONSTRAINT FOREIGN KEY (`category_id`) REFERENCES `Category` (`id`)
+    FOREIGN KEY (`author_id`) REFERENCES `User` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`category_id`) REFERENCES `Category` (`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `Entry_Attachment`
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `Entry_Attachment`
 
     PRIMARY KEY (`id`),
     KEY (`entry_id`),
-    CONSTRAINT FOREIGN KEY (`entry_id`) REFERENCES `Blog_Entry` (`id`)
+    FOREIGN KEY (`entry_id`) REFERENCES `Blog_Entry` (`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `Entry_To_Permission`
@@ -74,9 +74,9 @@ CREATE TABLE IF NOT EXISTS `Entry_To_Permission`
 
     PRIMARY KEY (`entry_id`, `permission_id`),
     KEY (`entry_id`),
-    CONSTRAINT FOREIGN KEY (`entry_id`) REFERENCES `Blog_Entry` (`id`),
+    FOREIGN KEY (`entry_id`) REFERENCES `Blog_Entry` (`id`) ON DELETE CASCADE,
     KEY (`permission_id`),
-    CONSTRAINT FOREIGN KEY (`permission_id`) REFERENCES `Permission` (`id`)
+    FOREIGN KEY (`permission_id`) REFERENCES `Permission` (`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `Entry_To_Tag`
@@ -86,9 +86,9 @@ CREATE TABLE IF NOT EXISTS `Entry_To_Tag`
 
     PRIMARY KEY (`tag_id`, `entry_id`),
     KEY (`tag_id`),
-    CONSTRAINT FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`id`),
+    FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`id`) ON DELETE CASCADE,
     KEY (`entry_id`),
-    CONSTRAINT FOREIGN KEY (`entry_id`) REFERENCES `Blog_Entry` (`id`)
+    FOREIGN KEY (`entry_id`) REFERENCES `Blog_Entry` (`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `Entry_View`
@@ -99,9 +99,9 @@ CREATE TABLE IF NOT EXISTS `Entry_View`
 
     PRIMARY KEY (`user_id`, `entry_id`),
     KEY (`user_id`),
-    CONSTRAINT FOREIGN KEY (`user_id`) REFERENCES `User` (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `User` (`id`) ON DELETE CASCADE,
     KEY (`entry_id`),
-    CONSTRAINT FOREIGN KEY (`entry_id`) REFERENCES `Blog_Entry` (`id`)
+    FOREIGN KEY (`entry_id`) REFERENCES `Blog_Entry` (`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `User_To_Permission`
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `User_To_Permission`
 
     PRIMARY KEY (`user_id`, `permission_id`),
     KEY (`user_id`),
-    CONSTRAINT FOREIGN KEY (`user_id`) REFERENCES `User` (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `User` (`id`) ON DELETE CASCADE,
     KEY (`permission_id`),
-    CONSTRAINT FOREIGN KEY (`permission_id`) REFERENCES `Permission` (`id`)
+    FOREIGN KEY (`permission_id`) REFERENCES `Permission` (`id`) ON DELETE CASCADE
 );

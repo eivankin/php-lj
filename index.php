@@ -28,6 +28,8 @@ $urls = array(
     '/entries/new' => 'pages/entries/new.php',
     '/users/' => 'pages/users/list.php',
     '/users/new' =>  'pages/users/new.php',
+    '/categories/' => 'pages/categories/list.php',
+    '/categories/new' => 'pages/categories/new.php',
 );
 
 if (isset($urls[$_SERVER['REQUEST_URI']])) {
