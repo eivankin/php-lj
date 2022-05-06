@@ -35,7 +35,7 @@ function authorize(string $username, string $password): int
     return -1;
 }
 
-function get_user(int $id): array
+function get_user(int $id)
 {
     $query = get_connection()->prepare('SELECT * FROM user WHERE id = ?');
     $query->bind_param('i', $id);
@@ -74,4 +74,36 @@ function delete_user(int $id): bool {
     $result = $query->execute();
     get_connection()->commit();
     return $result;
+}
+
+function update_user(int $id, string $username, string $email): bool {
+    $query = get_connection()->prepare('UPDATE user SET username = ?, email = ? WHERE id = ?');
+    $query->bind_param('ssi', $username, $email, $id);
+    try {
+        return $query->execute();
+    } catch (mysqli_sql_exception $exception) {
+        return false;
+    }
+}
+
+function verify_password(int $id, string $password): bool {
+    $query = get_connection()->prepare('SELECT password_hash FROM user WHERE id = ?');
+
+    $query->bind_param('i', $id);
+    $query->execute();
+
+    return password_verify($password, $query->get_result()->fetch_assoc()['password_hash']);
+}
+
+function handle_subscription($id): int
+{
+    require_once 'pages/util.php';
+    require_once 'db/permission/built-in.php';
+
+    handle_page_with_id($id, 'users', '/subscribe');
+    $user = get_user($id);
+    if (!isset($user))
+        not_found();
+
+    return get_or_create_permission('subscription_' . $id, 'Подписка на пользователя с ID ' . $id);
 }

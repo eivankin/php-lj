@@ -1,13 +1,10 @@
 <?php
-require_once 'pages/util.php';
-require_once 'db/permission/built-in.php';
+require_once 'db/user/util.php';
 
-$title = 'Подписка на пользователя';
 if (!isset($id))
     $id = null;
 
-handle_page_with_id($id, 'users', '/subscribe');
-$permission_id = get_or_create_permission('subscription_' . $id, 'Подписка на пользователя с ID ' . $id);
+$permission_id = handle_subscription($id);
 if (has_permission($_SESSION['user_id'], $permission_id)) {
     remove_permission_from_user($_SESSION['user_id'], $permission_id);
     $message = 'Вы успешно отписались от выбранного пользователя';

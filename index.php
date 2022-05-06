@@ -41,6 +41,7 @@ if (preg_match('/\/users\/(\d+).*/', $_SERVER['REQUEST_URI'], $matches)) {
         'ban' => 'pages/users/ban.php',
         'unban' => 'pages/users/unban.php',
         'delete' => 'pages/users/delete.php',
+        'edit' => 'pages/users/edit.php',
         'permissions' => 'pages/users/permissions.php'), $matches);
 }
 

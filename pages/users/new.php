@@ -7,6 +7,7 @@ login_required('/users/new');
 $title = 'Создание пользователя';
 if (!has_permission($_SESSION['user_id'], ADMIN)) {
     $message = 'У вас нет прав на создание пользователей';
+    http_response_code(403);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email']) &&
     isset($_POST['login']) && isset($_POST['password'])) {
     $message = create_user($_POST['email'], $_POST['login'], $_POST['password']);

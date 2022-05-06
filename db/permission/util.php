@@ -59,3 +59,15 @@ function has_any_permission(int $user_id, array $permission_ids): bool
     $query->execute();
     return isset($query->get_result()->fetch_assoc()['user_id']);
 }
+
+function get_user_permissions(int $user_id): array {
+    $query = get_connection()->prepare('SELECT * FROM permission WHERE id IN 
+                               (SELECT permission_id FROM user_to_permission WHERE user_id = ?)');
+    $query->bind_param('i', $user_id);
+    $query->execute();
+    return $query->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+function get_all_permissions(): array {
+    return get_connection()->query('SELECT * FROM permission')->fetch_all(MYSQLI_ASSOC);
+}

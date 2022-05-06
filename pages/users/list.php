@@ -21,6 +21,7 @@ foreach ($db->query('SELECT id, username, last_login FROM user')->fetch_all(MYSQ
             ' | <a href="./' . $user['id'] . '/unban">Разрешить создавать публикации</a>';
     if ($is_admin) {
         $actions .= ' | <a href="./' . $user['id'] . '/permissions">Управлять правами</a>' .
+            ' | <a href="./' . $user['id'] . '/edit">Редактировать</a>' .
             ' | <a href="./' . $user['id'] . '/delete">Удалить</a>';
     }
 

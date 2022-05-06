@@ -10,5 +10,6 @@ if (has_permission($_SESSION['user_id'], CAN_PUBLISH)) {
         '<button type="submit">Опубликовать</button></form>';
 } else {
     $message = 'У вас нет прав для создания публикации';
+    http_response_code(403);
 }
 require_once 'pages/base.php';
