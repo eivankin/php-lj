@@ -55,18 +55,6 @@ CREATE TABLE IF NOT EXISTS `Blog_Entry`
     FOREIGN KEY (`category_id`) REFERENCES `Category` (`id`) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS `Entry_Attachment`
-(
-    `id`       int          NOT NULL AUTO_INCREMENT,
-    `type`     int          NOT NULL,
-    `entry_id` int          NOT NULL,
-    `url`      varchar(256) NOT NULL,
-
-    PRIMARY KEY (`id`),
-    KEY (`entry_id`),
-    FOREIGN KEY (`entry_id`) REFERENCES `Blog_Entry` (`id`) ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS `Entry_To_Permission`
 (
     `entry_id`      int NOT NULL,
