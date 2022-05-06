@@ -24,12 +24,28 @@ function create_category(string $name, $parent_id)
 
 function update_category(int $id, string $name, int $parent_id)
 {
+    get_connection()->begin_transaction();
+    $query = get_connection()->prepare('UPDATE category SET name = ?, parent_id = ? WHERE id = ?');
+    $query->bind_param('ssi', $name, $parent_id, $id);
+    $query->execute();
+    get_connection()->commit();
 }
 
-function delete_category(int $id)
+function delete_category(int $id): bool
 {
+    get_connection()->begin_transaction();
+    $query = get_connection()->prepare('DELETE FROM category WHERE id = ?');
+    $query->bind_param('i', $id);
+    $result = $query->execute();
+    get_connection()->commit();
+    return $result;
 }
 
 function get_category(int $id)
 {
+    $query = get_connection()->prepare('SELECT * FROM category WHERE id = ?');
+    $query->bind_param('i', $id);
+    $query->execute();
+
+    return $query->get_result()->fetch_assoc();
 }

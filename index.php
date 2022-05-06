@@ -53,5 +53,11 @@ if (preg_match('/\/entries\/(\d+).*/', $_SERVER['REQUEST_URI'], $matches)) {
         'permissions' => 'pages/entries/permissions.php'), $matches);
 }
 
+if (preg_match('/\/categories\/(\d+).*/', $_SERVER['REQUEST_URI'], $matches)) {
+    handle_url_with_id(array('pages/categories/show.php',
+        'delete' => 'pages/categories/delete.php',
+        'edit' => 'pages/categories/edit.php'), $matches);
+}
+
 
 not_found();

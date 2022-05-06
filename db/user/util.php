@@ -77,10 +77,13 @@ function delete_user(int $id): bool {
 }
 
 function update_user(int $id, string $username, string $email): bool {
+    get_connection()->begin_transaction();
     $query = get_connection()->prepare('UPDATE user SET username = ?, email = ? WHERE id = ?');
     $query->bind_param('ssi', $username, $email, $id);
     try {
-        return $query->execute();
+        $result = $query->execute();
+        get_connection()->commit();
+        return $result;
     } catch (mysqli_sql_exception $exception) {
         return false;
     }
