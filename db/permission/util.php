@@ -3,17 +3,18 @@ require_once 'db/connection.php';
 
 function get_or_create_permission(string $internal_name, string $description): int
 {
+    get_connection()->begin_transaction();
     $query = get_connection()->prepare('INSERT INTO permission(internal_name, description) VALUES (?, ?)');
     $query->bind_param('ss', $internal_name, $description);
     try {
         $query->execute();
-        get_connection()->close();
+        get_connection()->commit();
         return $query->insert_id;
     } catch (mysqli_sql_exception $exception) {
         $query = get_connection()->prepare('SELECT id FROM permission WHERE internal_name = ?');
         $query->bind_param('s', $internal_name);
         $query->execute();
-
+        get_connection()->commit();
         return $query->get_result()->fetch_assoc()['id'];
     }
 }

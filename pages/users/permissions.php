@@ -58,8 +58,8 @@ foreach ($permissions as $permission) {
 
 $content .= '
 <tr>
-        <td><input form="add" type="text" name="name" placeholder="Введите обозначение" required></td>
-        <td><textarea form="add" rows="1" name="description" placeholder="Введите описание" required></textarea></td>
+        <td><input form="add" type="text" name="add_name" placeholder="Введите обозначение" required></td>
+        <td><textarea form="add" rows="1" name="add_description" placeholder="Введите описание" required></textarea></td>
         <td><button form="add" type="submit">Добавить</button></td>
 </tr>
 <tr>
