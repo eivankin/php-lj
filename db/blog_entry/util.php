@@ -51,3 +51,13 @@ function get_all_entries(): array
 {
     return get_connection()->query('SELECT * FROM blog_entry')->fetch_all(MYSQLI_ASSOC);
 }
+
+
+function get_entry(int $id)
+{
+    $query = get_connection()->prepare('SELECT * FROM blog_entry WHERE id = ?');
+    $query->bind_param('i', $id);
+    $query->execute();
+
+    return $query->get_result()->fetch_assoc();
+}

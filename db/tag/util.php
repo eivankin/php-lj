@@ -65,7 +65,7 @@ function delete_tag(int $id): bool
 }
 
 
-function get_entry_tags(int $entry_id): array
+function get_entry_tags(int $entry_id)
 {
     $query = get_connection()->prepare('SELECT * FROM tag WHERE id IN 
                         (SELECT tag_id FROM entry_to_tag WHERE entry_id = ?)');

@@ -109,3 +109,11 @@ function remove_permission_from_entry(int $entry_id, int $permission_id)
     $query->execute();
     get_connection()->commit();
 }
+
+function get_entry_permissions(int $entry_id) {
+    $query = get_connection()->prepare('SELECT * FROM permission WHERE id IN 
+                        (SELECT permission_id FROM entry_to_permission WHERE entry_id = ?)');
+    $query->bind_param('i', $entry_id);
+    $query->execute();
+    return $query->get_result()->fetch_all(MYSQLI_ASSOC);
+}

@@ -7,7 +7,7 @@ $is_admin = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], 
 
 $content = '';
 if ($is_admin)
-    $content .= '<a href="./new"><button>Добавить категорию</button></a>';
+    $content .= '<p><a href="./new"><button>Добавить категорию</button></a></p>';
 
 $content .= '
 <table>

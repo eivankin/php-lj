@@ -2,12 +2,13 @@
 require_once 'db/blog_entry/util.php';
 require_once 'db/user/util.php';
 require_once 'db/category/util.php';
+require_once 'db/blog_entry/views.php';
 
 $is_admin = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], ADMIN);
 
 $title = 'Публикации';
 $content = '
-<a href="./new"><button>Добавить публикацию</button></a>
+<p><a href="./new"><button>Добавить публикацию</button></a></p>
 ';
 $content .= '<table>
     <thead>
@@ -19,6 +20,7 @@ $content .= '<table>
             <th>Дата публикации</th>
             <th>Дата последнего редактирования</th>
             <th>Теги</th>
+            <th>Просмотры</th>
             <th>Действия</th>
         </tr>
     </thead>
@@ -35,6 +37,8 @@ foreach (get_all_entries() as $entry) {
         return $t['name'];
     }, get_entry_tags($entry['id'])));
 
+    $views_count = get_views_count($entry['id']);
+
     $author = get_user($entry['author_id']);
     $category = get_category($entry['category_id']);
     $content .= "<tr>
@@ -45,6 +49,7 @@ foreach (get_all_entries() as $entry) {
         <td>{$entry['published']}</td>
         <td>{$entry['edited']}</td>
         <td>{$tags}</td>
+        <td>{$views_count}</td>
         <td>{$actions}</td>
     </tr>";
 }

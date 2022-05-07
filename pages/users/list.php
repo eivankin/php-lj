@@ -7,7 +7,7 @@ $is_moderator = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id
 
 $content = '';
 if ($is_admin)
-    $content .= '<a href="./new">Добавить пользователя</a>';
+    $content .= '<p><a href="./new"><button>Добавить пользователя</button></a></p>';
 
 $content .= '<table><thead><tr>
 <th>№</th><th>Имя пользователя</th><th>Последний вход на сайт</th><th>Действия</th>
