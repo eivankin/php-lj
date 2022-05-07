@@ -61,11 +61,49 @@ function get_entry(int $id)
     return $query->get_result()->fetch_assoc();
 }
 
-function edit(int    $entry_id, int $user_id, string $title,
+function edit(int    $entry_id, string $title,
               string $content, int $category_id,
-              array  $tags, array $permissions): string
+              array  $tags, array $permissions,
+              array $old_tags, array $old_permissions): string
 {
-    return 'TODO';
+    if (!update_entry($entry_id, $title, $content, $category_id))
+        return 'Не удалось обновить публикацию';
+
+    try {
+        foreach (array_diff($old_tags, $tags) as $tag_to_remove)
+            remove_tag_from_entry($tag_to_remove, $entry_id);
+
+        foreach (array_diff($tags, $old_tags) as $tag_to_add)
+            add_tag_to_entry($tag_to_add, $entry_id);
+    } catch (mysqli_sql_exception $exception) {
+        return 'Не удалось обновить теги публикации';
+    }
+
+    try {
+        foreach (array_diff($old_permissions, $permissions) as $permission_to_remove)
+            remove_permission_from_entry($entry_id, $permission_to_remove);
+
+        foreach (array_diff($permissions, $old_permissions) as $permission_to_add)
+            add_permission_to_entry($entry_id, $permission_to_add);
+
+    } catch (mysqli_sql_exception $exception) {
+        return 'Не удалось обновить разрешения для просмотра публикации';
+    }
+
+    return 'Публикация успешно обновлена';
+}
+
+function update_entry(int $entry_id, string $title, string $content, int $category_id): bool {
+    try {
+        get_connection()->begin_transaction();
+        $query = get_connection()->prepare('UPDATE blog_entry SET title = ?, content = ?, category_id = ? WHERE id = ?');
+        $query->bind_param('ssii', $title, $content, $category_id, $entry_id);
+        $result = $query->execute();
+        get_connection()->commit();
+        return $result;
+    } catch (mysqli_sql_exception $exception) {
+        return false;
+    }
 }
 
 function delete_entry(int $id): bool {
