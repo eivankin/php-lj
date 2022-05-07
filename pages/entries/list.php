@@ -9,9 +9,75 @@ $is_moderator = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id
 
 
 $title = 'Публикации';
-$content = '
-<p><a href="./new"><button>Добавить публикацию</button></a></p>
-';
+$content = "
+<form style='margin-left: 0; width: 300px'>
+    <h3>Поиск публикаций</h3>
+    <div>
+        <label for='title'>Заголовок</label>
+        <input type='text' id='title' name='title' value='{$_GET['title']}'>
+    </div>
+    <div>
+        <label for='content'>Содержимое</label>
+        <input type='text' id='content' name='content' value='{$_GET['content']}'>
+    </div>
+    <div>
+        <label for='author'>Автор</label>
+        <select id='author' name='author'>
+            <option value=''>Выберите автора</option>
+            ";
+
+foreach (get_all_users() as $user) {
+    $selected = ($user['id'] == $_GET['author']) ? ' selected' : '';
+    $content .= "<option value='{$user['id']}'{$selected}>{$user['username']}</option>";
+}
+
+$content .= "
+        </select>
+    </div>
+    <div>
+        <label for='category'>Категория</label>
+        <select id='category' name='category'>
+            <option value=''>Выберите категорию</option>";
+
+foreach (get_all_categories() as $category) {
+    $selected = ($category['id'] == $_GET['category']) ? ' selected' : '';
+    $content .= "<option value='{$category['id']}'{$selected}>{$category['name']}</option>";
+}
+
+$content .= "
+        </select>
+    </div>
+    
+    <div>
+        <label for='tags'>Теги</label>
+        <select id='tags' name='tags[]' multiple>";
+
+foreach (get_all_tags() as $tag) {
+    $selected = '';
+    if (in_array($tag['id'], $_GET['tags'] ?? [])) {
+        $selected = ' selected';
+    }
+    $content .= "<option value='{$tag['id']}'{$selected}>{$tag['name']}</option>";
+}
+
+$selected = ['', ' selected'];
+if (isset($_GET['mode']) && !$_GET['mode'])
+    $selected = array_reverse($selected);
+
+$content .= "</select>
+    </div>
+    <div>
+        <label for='mode'>Тип поиска</label>
+        <select id='mode' name='mode' required>
+            <option value='0'{$selected[0]}>Объединение признаков (OR)</option>
+            <option value='1'{$selected[1]}>Пересечение признаков (AND)</option>
+        </select>
+    </div>
+    <button type='submit'>Поиск</button>
+    <a href='./'><button type='button'>Сбросить фильтры</button></a>
+</form>
+<p><a href='./new'><button>Добавить публикацию</button></a></p>
+";
 $content .= '<table>
     <thead>
         <tr>
@@ -28,7 +94,9 @@ $content .= '<table>
     </thead>
     <tbody>';
 
-foreach (get_all_entries() as $entry) {
+foreach (get_entries($_GET['title'], $_GET['content'],
+    (!empty($_GET['category'])) ? $_GET['category'] : null,
+    (!empty($_GET['author'])) ? $_GET['author'] : null, $_GET['tags'], $_GET['mode'] ?? true) as $entry) {
     $actions = '';
     if ($is_admin || $entry['author_id'] == $_SESSION['user_id']) {
         $actions .= "<a href='./{$entry['id']}/edit'>Редактировать</a> | " .
