@@ -20,8 +20,7 @@ function publish(int   $user_id, string $title, string $content, int $category_i
 
     try {
         foreach ($permissions as $permission) {
-            add_permission_to_entry(BUILTIN_PERMISSIONS[$permission] ?? get_permission_by_name($permission)['id'],
-                $entry_id);
+            add_permission_to_entry($entry_id, $permission);
         }
     } catch (mysqli_sql_exception $exception) {
         return 'Не удалось связать публикацию с разрешениями для просмотра. Перейдите к реактированию и попробуйте ещё раз.';
@@ -60,4 +59,24 @@ function get_entry(int $id)
     $query->execute();
 
     return $query->get_result()->fetch_assoc();
+}
+
+function edit(int    $entry_id, int $user_id, string $title,
+              string $content, int $category_id,
+              array  $tags, array $permissions): string
+{
+    return 'TODO';
+}
+
+function delete_entry(int $id): bool {
+    try {
+        get_connection()->begin_transaction();
+        $query = get_connection()->prepare('DELETE FROM blog_entry WHERE id = ?');
+        $query->bind_param('i', $id);
+        $result = $query->execute();
+        get_connection()->commit();
+        return $result;
+    } catch (mysqli_sql_exception $exception) {
+        return false;
+    }
 }

@@ -12,7 +12,7 @@ if (has_permission($_SESSION['user_id'], CAN_PUBLISH)) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) &&
         isset($_POST['content']) && isset($_POST['category'])) {
         $message = publish($_SESSION['user_id'], $_POST['title'], $_POST['content'], $_POST['category'],
-            $_POST['tag'], $_POST['permission']);
+            $_POST['tag'] ?? [], $_POST['permission']?? []);
     } else {
 
         $content = '
@@ -45,19 +45,20 @@ if (has_permission($_SESSION['user_id'], CAN_PUBLISH)) {
             $content .= "<option value='{$tag['id']}'>{$tag['name']}</option>";
         }
 
-        $content .= '</select>
+        $subscription_id = get_subscription_id($_SESSION['user_id']);
+        $content .= "</select>
     </div>
     <div>
-        <label for="permission">Кто может просматривать публикацию</label>
-        <select id="permission" name="permission[]" multiple>
-            <option value="subscription_' . $_SESSION['user_id'] . '">Мои подписчики</option>
-            <option value="admin">Администраторы</option>
-            <option value="moderator">Модераторы</option>
-            <option value="can_publish">Авторы других публикаций</option>
+        <label for='permission'>Кто может просматривать публикацию</label>
+        <select id='permission' name='permission[]' multiple>
+            <option value='{$subscription_id}'>Мои подписчики</option>
+            <option value='" . ADMIN . "'>Администраторы</option>
+            <option value='" . MODERATOR . "'>Модераторы</option>
+            <option value='" . CAN_PUBLISH . "'>Авторы других публикаций</option>
         </select>
     </div>
-    <button type="submit">Опубликовать</button>
-</form>';
+    <button type='submit'>Опубликовать</button>
+</form>";
     }
 } else {
     $message = 'У вас нет прав для создания публикации';

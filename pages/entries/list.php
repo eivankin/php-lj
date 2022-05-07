@@ -5,6 +5,8 @@ require_once 'db/category/util.php';
 require_once 'db/blog_entry/views.php';
 
 $is_admin = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], ADMIN);
+$is_moderator = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], MODERATOR);
+
 
 $title = 'Публикации';
 $content = '
@@ -31,6 +33,8 @@ foreach (get_all_entries() as $entry) {
     if ($is_admin || $entry['author_id'] == $_SESSION['user_id']) {
         $actions .= "<a href='./{$entry['id']}/edit'>Редактировать</a> | " .
             "<a href='./{$entry['id']}/delete'>Удалить</a>";
+    } elseif ($is_moderator) {
+        $actions .= "<a href='./{$entry['id']}/delete'>Удалить</a>";
     }
 
     $tags = join(' | ', array_map(function ($t) {

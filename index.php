@@ -54,7 +54,7 @@ if (preg_match('/\/users\/(\d+).*/', $url, $matches)) {
 if (preg_match('/\/entries\/(\d+).*/', $url, $matches)) {
     handle_url_with_id(array('pages/entries/show.php',
         'delete' => 'pages/entries/delete.php',
-        'permissions' => 'pages/entries/permissions.php'), $matches);
+        'edit' => 'pages/entries/edit.php'), $matches);
 }
 
 if (preg_match('/\/categories\/(\d+).*/', $url, $matches)) {

@@ -26,6 +26,9 @@ if (count($permissions) > 0 &&
     (!isset($_SESSION['user_id']) || ($_SESSION['user_id'] != $entry['author_id'] && !has_any_permission($_SESSION['user_id'], $permissions)))) {
     $message = 'У вас нет прав для просмотра этой публикации';
 } else {
+    if (isset($_SESSION['user_id']))
+        create_view($_SESSION['user_id'], $id);
+
     $author = get_user($entry['author_id']);
     $views_count = get_views_count($id);
     $category = get_category($entry['category_id']);
@@ -42,9 +45,6 @@ if (count($permissions) > 0 &&
     <p><b>Категория:</b> {$category['name']}</p>
     <p><b>Теги:</b> {$tags}</p>
     ";
-
-    if (isset($_SESSION['user_id']))
-        create_view($_SESSION['user_id'], $id);
 }
 
 require_once 'pages/base.php';

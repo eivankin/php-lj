@@ -6,9 +6,3 @@ define('MODERATOR', get_or_create_permission('moderator',
     'Роль модератора, позваляющая удалять публикации и управлять разрешением на их создание'));
 define('CAN_PUBLISH', get_or_create_permission('can_publish',
     'Разрешение на публикацию материалов от своего лица'));
-
-const BUILTIN_PERMISSIONS = array(
-    'admin' => ADMIN,
-    'moderator' => MODERATOR,
-    'can_publish' => CAN_PUBLISH
-);

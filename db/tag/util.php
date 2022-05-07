@@ -65,11 +65,19 @@ function delete_tag(int $id): bool
 }
 
 
-function get_entry_tags(int $entry_id)
+function get_entry_tags(int $entry_id): array
 {
     $query = get_connection()->prepare('SELECT * FROM tag WHERE id IN 
                         (SELECT tag_id FROM entry_to_tag WHERE entry_id = ?)');
     $query->bind_param('i', $entry_id);
     $query->execute();
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+
+function has_tag(int $entry_id, int $tag_id): bool {
+    $query = get_connection()->prepare('SELECT * FROM entry_to_tag WHERE entry_id = ? AND tag_id = ?');
+    $query->bind_param('ii', $entry_id, $tag_id);
+    $query->execute();
+    return isset($query->get_result()->fetch_assoc()['tag_id']);
 }

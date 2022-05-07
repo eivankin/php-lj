@@ -1,5 +1,6 @@
 <?php
 require_once 'db/connection.php';
+require_once 'db/permission/util.php';
 
 function create_user(string $email, string $name, string $password): string
 {
@@ -108,7 +109,7 @@ function handle_subscription($id): int
     if (!isset($user))
         not_found();
 
-    return get_or_create_permission('subscription_' . $id, 'Подписка на пользователя с ID ' . $id);
+    return get_subscription_id($id);
 }
 
 

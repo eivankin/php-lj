@@ -110,10 +110,23 @@ function remove_permission_from_entry(int $entry_id, int $permission_id)
     get_connection()->commit();
 }
 
-function get_entry_permissions(int $entry_id) {
+function get_entry_permissions(int $entry_id): array
+{
     $query = get_connection()->prepare('SELECT * FROM permission WHERE id IN 
                         (SELECT permission_id FROM entry_to_permission WHERE entry_id = ?)');
     $query->bind_param('i', $entry_id);
     $query->execute();
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+function has_entry_permission(int $entry_id, int $permission_id): bool
+{
+    $query = get_connection()->prepare('SELECT * FROM entry_to_permission WHERE entry_id = ? AND permission_id = ?');
+    $query->bind_param('ii', $entry_id, $permission_id);
+    $query->execute();
+    return isset($query->get_result()->fetch_assoc()['entry_id']);
+}
+
+function get_subscription_id(int $id): int {
+    return get_or_create_permission('subscription_' . $id, 'Подписка на пользователя с ID ' . $id);
 }
