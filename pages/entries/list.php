@@ -72,6 +72,43 @@ $content .= "</select>
             <option value='0'{$selected[0]}>Объединение признаков (OR)</option>
             <option value='1'{$selected[1]}>Пересечение признаков (AND)</option>
         </select>
+    </div>";
+
+$selected = ['', '', ''];
+$selected_index = null;
+if ($_GET['order_by'] == 'published') {
+    $selected_index = 0;
+} elseif ($_GET['order_by'] == 'edited') {
+    $selected_index = 1;
+} elseif ($_GET['order_by'] == $title) {
+    $selected_index = 2;
+}
+
+if (isset($selected_index)) {
+    $selected[$selected_index] = ' selected';
+}
+
+$content .= "
+    <div>
+        <label for='order_by'>Сортировать по столбцу</label>
+        <select id='order_by' name='order_by'>
+            <option>Выберите столбец</option>
+            <option value='published'{$selected[0]}>Дата публикации</option>
+            <option value='edited'{$selected[1]}>Дата редактирования</option>
+            <option value='title'{$selected[2]}>Заголовок</option>
+        </select>
+    </div>";
+
+$selected = [' selected', ''];
+if (!empty($_GET['order']))
+    $selected = array_reverse($selected);
+$content .= "
+    <div>
+        <label for='order'>Тип сортировки</label>
+        <select id='order' name='order'>
+            <option value='0'{$selected[0]}>По возрастанию</option>
+            <option value='1'{$selected[1]}>По убыванию</option>
+        </select>
     </div>
     <button type='submit'>Поиск</button>
     <a href='./'><button type='button'>Сбросить фильтры</button></a>
@@ -96,7 +133,8 @@ $content .= '<table>
 
 foreach (get_entries($_GET['title'], $_GET['content'],
     (!empty($_GET['category'])) ? $_GET['category'] : null,
-    (!empty($_GET['author'])) ? $_GET['author'] : null, $_GET['tags'], $_GET['mode'] ?? true) as $entry) {
+    (!empty($_GET['author'])) ? $_GET['author'] : null, $_GET['tags'], $_GET['mode'] ?? true,
+            $_GET['order_by'], $_GET['order'] ?? true) as $entry) {
     $actions = '';
     if ($is_admin || $entry['author_id'] == $_SESSION['user_id']) {
         $actions .= "<a href='./{$entry['id']}/edit'>Редактировать</a> | " .

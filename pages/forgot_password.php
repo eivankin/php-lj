@@ -1,7 +1,7 @@
 <?php
 require_once 'db/user/util.php';
 const PSWD_FORM = '
-<form method="post">
+<form class="fixed-width" method="post">
     <div>
         <label for="password">Новый пароль</label>
         <input type="password" id="password" name="password" required>
@@ -11,15 +11,15 @@ const PSWD_FORM = '
         <input type="password" id="password2" name="password2" required>
     </div>
     <button type="submit">Установить пароль</button>
-</form>';
+</form class="fixed-width">';
 const TOKEN_FORM = '
-<form method="post">
+<form class="fixed-width" method="post">
     <div>
         <label for="token">Код</label>
         <input type="text" id="token" name="token" required>
     </div>
     <button type="submit">Сбросить пароль</button>
-</form>';
+</form class="fixed-width">';
 
 
 if (isset($_SESSION['user_id'])) {
@@ -76,13 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
 $title = 'Восстановление пароля';
 if (!isset($content)) {
     $content = '
-<form method="post">
+<form class="fixed-width" method="post">
 <div>
     <label for="email">E-mail</label>
     <input type="email" id="email" name="email" required>
 </div>
 <button type="submit">Восстановить пароль</button>
-</form>
+</form class="fixed-width">
 ';
 }
 require_once 'pages/base.php';

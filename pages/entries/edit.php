@@ -26,7 +26,7 @@ if ($_SESSION['user_id'] == $entry['author_id'] || has_permission($_SESSION['use
     } else {
 
         $content = '
-<form style="width: 450px" method="post">
+<form class="fixed-width" style="width: 450px" method="post">
     <div>
         <label for="title">Заголовок</label>
         <input type="text" id="title" value="' . $entry['title'] . '" name="title" required>

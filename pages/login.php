@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login']) && isset($_PO
 
 $title = 'Вход на сайт';
 $content = '
-<form method="post">
+<form method="post" class="fixed-width">
     <div>
         <label for="login">Логин</label>
         <input type="text" name="login" id="login" required>

@@ -1,6 +1,8 @@
 <?php
 require_once 'db/connection.php';
 
+const SUBSCRIPTION_PREFIX = 'subscription_';
+
 function get_or_create_permission(string $internal_name, string $description): int
 {
     get_connection()->begin_transaction();
@@ -127,6 +129,18 @@ function has_entry_permission(int $entry_id, int $permission_id): bool
     return isset($query->get_result()->fetch_assoc()['entry_id']);
 }
 
-function get_subscription_id(int $id): int {
-    return get_or_create_permission('subscription_' . $id, 'Подписка на пользователя с ID ' . $id);
+function get_subscription_id(int $id): int
+{
+    return get_or_create_permission(SUBSCRIPTION_PREFIX . $id, 'Подписка на пользователя с ID ' . $id);
+}
+
+function get_subscriptions(int $user_id): array
+{
+    $prefix = SUBSCRIPTION_PREFIX;
+    $query = get_connection()->prepare("SELECT CAST(REPLACE(internal_name, '{$prefix}_', '') AS UNSIGNED) AS user_id 
+        FROM permission WHERE internal_name LIKE '{$prefix}%' AND id IN 
+                                                              (SELECT permission_id FROM user_to_permission WHERE user_id = ?)");
+    $query->bind_param('i', $user_id);
+    $query->execute();
+    return $query->get_result()->fetch_all();
 }

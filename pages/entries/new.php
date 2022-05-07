@@ -16,7 +16,7 @@ if (has_permission($_SESSION['user_id'], CAN_PUBLISH)) {
     } else {
 
         $content = '
-<form style="width: 450px" method="post">
+<form class="fixed-width" style="width: 450px" method="post">
     <div>
         <label for="title">Заголовок</label>
         <input type="text" id="title" name="title" required>

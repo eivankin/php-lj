@@ -48,7 +48,9 @@ function create_entry(int $user_id, string $title, string $content, int $categor
 
 function get_entries(string $title_like = null, string $content_like = null,
                      int    $category_id = null, int $author_id = null,
-                     array  $tags_in = null, bool $join_by_and = true): array
+                     array  $tags_in = null, bool $join_by_and = true,
+                     string $order_by_column = null, bool $order_desc = true,
+                     int    $limit = null): array
 {
     $bind_list = '';
     $filter_condition = array();
@@ -87,11 +89,14 @@ function get_entries(string $title_like = null, string $content_like = null,
         array_push($params, ...$tags_in);
     }
 
-    if (count($filter_condition) < 1)
-        return get_connection()->query('SELECT * FROM blog_entry')->fetch_all(MYSQLI_ASSOC);
+    $order = make_order_query($order_by_column, $order_desc);
+    $limit_query = make_limit_query($limit);
 
-    $filter_condition = join($join_by_and ? ' AND ' : ' OR ', $filter_condition);
-    $query = get_connection()->prepare("SELECT * FROM blog_entry WHERE {$filter_condition}");
+    if (empty($bind_list))
+        return get_connection()->query("SELECT * FROM blog_entry{$order}")->fetch_all(MYSQLI_ASSOC);
+
+    $filter_condition = ' WHERE ' . join($join_by_and ? ' AND ' : ' OR ', $filter_condition);
+    $query = get_connection()->prepare("SELECT * FROM blog_entry{$filter_condition}{$order}{$limit_query}");
     $query->bind_param($bind_list, ...$params);
     $query->execute();
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
@@ -167,8 +172,44 @@ function delete_entry(int $id): bool
     }
 }
 
+function get_most_popular(int $limit = 5): array
+{
+    $query = get_connection()->prepare('SELECT blog_entry.*, COUNT(entry_id) AS views_count from blog_entry 
+        INNER JOIN entry_view ev on blog_entry.id = ev.entry_id 
+                                                    GROUP BY entry_id ORDER BY views_count DESC LIMIT ?');
+    $query->bind_param('i', $limit);
+    $query->execute();
+    return $query->get_result()->fetch_all(MYSQLI_ASSOC);
+}
 
-//function get_most_popular(): bool
-//{
-//
-//}
+function get_subscription_entries(int $user_id, int $limit = null, string $order_by_column = 'published', bool $order_desc = true): array
+{
+    $subscribed_on = get_subscriptions($user_id);
+    $params = str_repeat('?,', count($subscribed_on) - 1) . '?';
+    $bind_list = str_repeat('i', count($subscribed_on));
+
+    $limit_query = make_limit_query($limit);
+    $order = make_order_query($order_by_column, $order_desc);
+
+    $query = get_connection()->prepare("SELECT * FROM blog_entry WHERE author_id IN ({$params}){$order}{$limit_query}");
+    $query->bind_param($bind_list, ...$subscribed_on);
+    $query->execute();
+    return $query->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+
+function make_order_query(string $order_by_column = null, bool $order_desc = true): string
+{
+    $order = '';
+    if (!empty($order_by_column) && in_array($order_by_column, ['id', 'published', 'edited', 'title']))
+        $order = " ORDER BY {$order_by_column} " . (($order_desc) ? 'DESC' : 'ASC');
+    return $order;
+}
+
+function make_limit_query(int $limit = null): string
+{
+    $limit_query = '';
+    if (isset($limit))
+        $limit_query = " LIMIT {$limit}";
+    return $limit_query;
+}

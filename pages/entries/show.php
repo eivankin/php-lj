@@ -9,7 +9,7 @@ require_once 'db/category/util.php';
 if (!isset($id))
     $id = null;
 
-handle_page_with_id($id, 'entries', '/', false);
+handle_page_with_id($id, 'entries', '', false);
 
 $entry = get_entry($id);
 if (!isset($entry)) {

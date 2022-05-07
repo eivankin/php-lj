@@ -74,7 +74,7 @@ form > div {
     margin: 10px 0;
 }
 
-form {
+form.fixed-width {
     width: 250px;
     margin: 25px auto;
 }
@@ -119,9 +119,22 @@ td, th {
 }
 
 tr:hover {
-    background-color: #ddd;
+    background-color: #ddd !important;
 }
 
 tr:nth-child(even) {
     background-color: #f2f2f2;
+}
+
+.entry-group {
+    display: flex;
+    flex-direction: row;
+}
+
+.entry-card {
+
+}
+
+td > form {
+    margin: 0;
 }

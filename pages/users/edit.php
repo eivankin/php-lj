@@ -26,7 +26,7 @@ if (!$is_the_same_user && !has_permission($_SESSION['user_id'], ADMIN)) {
     if (!isset($user))
         not_found();
 
-    $content = '<form method="post">
+    $content = '<form class="fixed-width" method="post">
     <div>
         <label for="login">Логин</label>
         <input type="text" name="login" id="login" value="' . $user['username'] . '" required>
