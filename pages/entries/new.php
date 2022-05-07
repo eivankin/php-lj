@@ -3,6 +3,7 @@ require_once 'pages/util.php';
 require_once 'db/permission/built-in.php';
 require_once 'db/category/util.php';
 require_once 'db/blog_entry/util.php';
+require_once 'db/tag/util.php';
 
 login_required('/entries/new');
 
@@ -10,13 +11,8 @@ $title = 'Добавить публикацию';
 if (has_permission($_SESSION['user_id'], CAN_PUBLISH)) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) &&
         isset($_POST['content']) && isset($_POST['category'])) {
-        try {
-            create_entry($_POST['title'], $_POST['content'], $_POST['category'],
-                $_POST['tag'], $_POST['permission']);
-            $message = 'Успешно опубликовано';
-        } catch (mysqli_sql_exception $exception) {
-            $message = 'Не удалось опубликовать материалы';
-        }
+        $message = publish($_SESSION['user_id'], $_POST['title'], $_POST['content'], $_POST['category'],
+            $_POST['tag'], $_POST['permission']);
     } else {
 
         $content = '
@@ -43,13 +39,21 @@ if (has_permission($_SESSION['user_id'], CAN_PUBLISH)) {
     </div>
     <div>
         <label for="tag">Теги</label>
-        <select id="tag" name="tag[]" multiple>
-        </select>
+        <select id="tag" name="tag[]" multiple>';
+
+        foreach (get_all_tags() as $tag) {
+            $content .= "<option value='{$tag['id']}'>{$tag['name']}</option>";
+        }
+
+        $content .= '</select>
     </div>
     <div>
-        <label for="permission">Разрешения для просмотра</label>
+        <label for="permission">Кто может просматривать публикацию</label>
         <select id="permission" name="permission[]" multiple>
-        
+            <option value="subscription_' . $_SESSION['user_id'] . '">Мои подписчики</option>
+            <option value="admin">Администраторы</option>
+            <option value="moderator">Модераторы</option>
+            <option value="can_publish">Авторы других публикаций</option>
         </select>
     </div>
     <button type="submit">Опубликовать</button>

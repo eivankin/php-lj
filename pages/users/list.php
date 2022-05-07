@@ -1,5 +1,6 @@
 <?php
 require_once 'db/permission/built-in.php';
+require_once 'db/user/util.php';
 $title = 'Пользователи';
 $is_admin = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], ADMIN);
 $is_moderator = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], MODERATOR);
@@ -12,8 +13,7 @@ $content .= '<table><thead><tr>
 <th>№</th><th>Имя пользователя</th><th>Последний вход на сайт</th><th>Действия</th>
 </tr></thead><tbody>';
 $db = get_connection();
-$index = 0;
-foreach ($db->query('SELECT id, username, last_login FROM user')->fetch_all(MYSQLI_ASSOC) as $user) {
+foreach (get_all_users() as $user) {
     $actions = '<a href="./' . $user['id'] . '/subscribe">Подписаться</a>' .
         ' | <a href="./' . $user['id'] . '/unsubscribe">Отписаться</a>';
     if ($is_moderator)
@@ -25,7 +25,7 @@ foreach ($db->query('SELECT id, username, last_login FROM user')->fetch_all(MYSQ
             ' | <a href="./' . $user['id'] . '/delete">Удалить</a>';
     }
 
-    $content .= '<tr><td>' . ++$index . '</td><td><a href="./' . $user['id'] . '">' . $user['username'] .
+    $content .= '<tr><td>' . $user['id'] . '</td><td><a href="./' . $user['id'] . '">' . $user['username'] .
         '</a></td><td>' . $user['last_login'] . '</td><td>' . $actions .  '</td></tr>';
 }
 $content .= '</tbody></table>';

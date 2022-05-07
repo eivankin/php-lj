@@ -110,3 +110,8 @@ function handle_subscription($id): int
 
     return get_or_create_permission('subscription_' . $id, 'Подписка на пользователя с ID ' . $id);
 }
+
+
+function get_all_users(): array {
+    return get_connection()->query('SELECT id, username, last_login FROM user')->fetch_all(MYSQLI_ASSOC);
+}
