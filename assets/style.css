@@ -55,12 +55,16 @@ a.white:hover {
     color: #829399;
 }
 
-button {
+button, th {
     background-color: rgb(0, 153, 204);
     color: white;
+    padding: 5px 10px;
+    font-weight: bold;
+}
+
+button {
     border: none;
     border-radius: 5px;
-    padding: 5px 10px;
 }
 
 form > div {
@@ -102,4 +106,22 @@ form {
 .fixed-width {
     width: 250px;
     margin: 0 auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    padding: 8px;
+    border: 1px solid #bbb;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
