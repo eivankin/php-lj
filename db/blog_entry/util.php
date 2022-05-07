@@ -47,8 +47,8 @@ function create_entry(int $user_id, string $title, string $content, int $categor
 
 
 function get_entries(string $title_like = null, string $content_like = null,
-                     int $category_id = null, int $author_id = null,
-                     array $tags_in = null, bool $join_by_and = true): array
+                     int    $category_id = null, int $author_id = null,
+                     array  $tags_in = null, bool $join_by_and = true): array
 {
     $bind_list = '';
     $filter_condition = array();
@@ -143,7 +143,7 @@ function update_entry(int $entry_id, string $title, string $content, int $catego
 {
     try {
         get_connection()->begin_transaction();
-        $query = get_connection()->prepare('UPDATE blog_entry SET title = ?, content = ?, category_id = ? WHERE id = ?');
+        $query = get_connection()->prepare('UPDATE blog_entry SET title = ?, content = ?, category_id = ?, edited = NOW() WHERE id = ?');
         $query->bind_param('ssii', $title, $content, $category_id, $entry_id);
         $result = $query->execute();
         get_connection()->commit();
@@ -166,3 +166,9 @@ function delete_entry(int $id): bool
         return false;
     }
 }
+
+
+//function get_most_popular(): bool
+//{
+//
+//}
