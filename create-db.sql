@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `User`
 
 CREATE TABLE IF NOT EXISTS `Tag`
 (
-    `id`   int          NOT NULL,
+    `id`   int          NOT NULL AUTO_INCREMENT,
     `name` varchar(256) NOT NULL UNIQUE,
 
     PRIMARY KEY (`id`)

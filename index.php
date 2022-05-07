@@ -32,6 +32,8 @@ $urls = array(
     '/users/new' =>  'pages/users/new.php',
     '/categories/' => 'pages/categories/list.php',
     '/categories/new' => 'pages/categories/new.php',
+    '/tags/' => 'pages/tags/list.php',
+    '/tags/new' => 'pages/tags/new.php'
 );
 
 if (isset($urls[$url])) {
@@ -59,6 +61,12 @@ if (preg_match('/\/categories\/(\d+).*/', $url, $matches)) {
     handle_url_with_id(array('pages/categories/show.php',
         'delete' => 'pages/categories/delete.php',
         'edit' => 'pages/categories/edit.php'), $matches);
+}
+
+if (preg_match('/\/tags\/(\d+).*/', $url, $matches)) {
+    handle_url_with_id(array('pages/tags/show.php',
+        'delete' => 'pages/tags/delete.php',
+        'edit' => 'pages/tags/edit.php'), $matches);
 }
 
 

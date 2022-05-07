@@ -19,6 +19,7 @@
             <li><a class="white" href="/users/">Пользователи</a></li>
             <li><a class="white" href="/entries/">Публикации</a></li>
             <li><a class="white" href="/categories/">Категории</a></li>
+            <li><a class="white" href="/tags/">Теги</a></li>
         </ul>
     </nav>
     <nav>

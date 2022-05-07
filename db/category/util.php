@@ -33,12 +33,16 @@ function update_category(int $id, string $name, int $parent_id)
 
 function delete_category(int $id): bool
 {
-    get_connection()->begin_transaction();
-    $query = get_connection()->prepare('DELETE FROM category WHERE id = ?');
-    $query->bind_param('i', $id);
-    $result = $query->execute();
-    get_connection()->commit();
-    return $result;
+    try {
+        get_connection()->begin_transaction();
+        $query = get_connection()->prepare('DELETE FROM category WHERE id = ?');
+        $query->bind_param('i', $id);
+        $result = $query->execute();
+        get_connection()->commit();
+        return $result;
+    } catch (mysqli_sql_exception $exception) {
+        return false;
+    }
 }
 
 function get_category(int $id)
