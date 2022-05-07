@@ -23,7 +23,7 @@ $permissions = array_map(function ($p) {
 }, get_entry_permissions($id));
 
 if (count($permissions) > 0 &&
-    (!isset($_SESSION['user_id']) || !has_any_permission($_SESSION['user_id'], $permissions))) {
+    (!isset($_SESSION['user_id']) || ($_SESSION['user_id'] != $entry['author_id'] && !has_any_permission($_SESSION['user_id'], $permissions)))) {
     $message = 'У вас нет прав для просмотра этой публикации';
 } else {
     $author = get_user($entry['author_id']);
