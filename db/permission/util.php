@@ -137,10 +137,12 @@ function get_subscription_id(int $id): int
 function get_subscriptions(int $user_id): array
 {
     $prefix = SUBSCRIPTION_PREFIX;
-    $query = get_connection()->prepare("SELECT CAST(REPLACE(internal_name, '{$prefix}_', '') AS UNSIGNED) AS user_id 
+    $query = get_connection()->prepare("SELECT CAST(REPLACE(internal_name, '{$prefix}', '') AS UNSIGNED) AS user_id 
         FROM permission WHERE internal_name LIKE '{$prefix}%' AND id IN 
                                                               (SELECT permission_id FROM user_to_permission WHERE user_id = ?)");
     $query->bind_param('i', $user_id);
     $query->execute();
-    return $query->get_result()->fetch_all();
+    return array_map(function ($a) {
+        return $a[0];
+    }, $query->get_result()->fetch_all());
 }
