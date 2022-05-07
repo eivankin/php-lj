@@ -14,7 +14,7 @@ function make_entry_card(array $entry): string {
             <p>Автор: <a href='/users/{$author['id']}'>{$author['username']}</a></p>
             <p>Опубликовано: {$entry['published']}</p>
             {$views}
-            <p><a href='/entries/{$entry['id']}'>Читать</a></p>
+            <p><a href='/entries/{$entry['id']}'><button>Читать</button></a></p>
         </div>
     </div>
     ";

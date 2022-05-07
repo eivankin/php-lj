@@ -126,13 +126,27 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-.entry-group {
+.card-group {
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
 }
 
 .entry-card {
+    border: 1px solid #bbb;
+    border-radius: 5px;
+}
 
+.entry-card > .card-header {
+    font-weight: bold;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #bbb;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.entry-card > * {
+    padding: 10px;
 }
 
 td > form {
