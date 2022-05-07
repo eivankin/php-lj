@@ -23,7 +23,7 @@ $content .= '
 
 
 foreach (get_all_categories() as $category) {
-    $actions = "<a href='./{$category['id']}'>Просмотреть публикации</a>";
+    $actions = "<a href='/entries/?category={$category['id']}'>Просмотреть публикации</a>";
 
     if ($is_admin) {
         $actions .= " | <a href='./{$category['id']}/edit'>Редактировать</a>" .

@@ -117,7 +117,7 @@ foreach (get_entries($_GET['title'], $_GET['content'],
         <td>{$entry['id']}</td>
         <td><a href='./{$entry['id']}'>{$entry['title']}</a></td>
         <td><a href='/users/{$entry['author_id']}'>{$author['username']}</a></td>
-        <td>{$category['name']}</td>
+        <td><a href='?category={$category['id']}'>{$category['name']}</a></td>
         <td>{$entry['published']}</td>
         <td>{$entry['edited']}</td>
         <td>{$tags}</td>

@@ -21,7 +21,7 @@ $content .= '
     <tbody>';
 
 foreach (get_all_tags() as $tag) {
-    $actions = "<a href='./{$tag['id']}'>Просмотреть публикации</a>";
+    $actions = "<a href='/entries/?tags[]={$tag['id']}'>Просмотреть публикации</a>";
 
     if ($is_admin) {
         $actions .= " | <a href='./{$tag['id']}/edit'>Редактировать</a>" .
