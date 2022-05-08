@@ -10,7 +10,7 @@ $is_moderator = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id
 
 $title = 'Публикации';
 $content = "
-<form style='margin-left: 0; width: 300px'>
+<form style='width: 300px'>
     <h3>Поиск публикаций</h3>
     <div>
         <label for='title'>Заголовок</label>
@@ -80,7 +80,7 @@ if ($_GET['order_by'] == 'published') {
     $selected_index = 0;
 } elseif ($_GET['order_by'] == 'edited') {
     $selected_index = 1;
-} elseif ($_GET['order_by'] == $title) {
+} elseif ($_GET['order_by'] == 'title') {
     $selected_index = 2;
 }
 

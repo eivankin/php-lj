@@ -2,6 +2,7 @@
 require_once 'db/connection.php';
 require_once 'db/tag/util.php';
 require_once 'db/permission/built-in.php';
+require_once 'db/util.php';
 
 function publish(int   $user_id, string $title, string $content, int $category_id,
                  array $tags, array $permissions): string
@@ -195,21 +196,4 @@ function get_subscription_entries(int $user_id, int $limit = null, string $order
     $query->bind_param($bind_list, ...$subscribed_on);
     $query->execute();
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
-}
-
-
-function make_order_query(string $order_by_column = null, bool $order_desc = true): string
-{
-    $order = '';
-    if (!empty($order_by_column) && in_array($order_by_column, ['id', 'published', 'edited', 'title']))
-        $order = " ORDER BY {$order_by_column} " . (($order_desc) ? 'DESC' : 'ASC');
-    return $order;
-}
-
-function make_limit_query(int $limit = null): string
-{
-    $limit_query = '';
-    if (isset($limit))
-        $limit_query = " LIMIT {$limit}";
-    return $limit_query;
 }

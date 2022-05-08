@@ -1,10 +1,12 @@
 <?php
 
 require_once 'db/connection.php';
+require_once 'db/util.php';
 
-function get_all_categories(): array
+function get_all_categories(string $order_by_column = null, bool $order_desc = true): array
 {
-    return get_connection()->query('SELECT * FROM category')->fetch_all(MYSQLI_ASSOC);
+    $order = make_order_query($order_by_column, $order_desc, ['id', 'name', 'parent_id']);
+    return get_connection()->query("SELECT * FROM category{$order}")->fetch_all(MYSQLI_ASSOC);
 }
 
 
