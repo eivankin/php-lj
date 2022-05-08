@@ -1,5 +1,6 @@
 <?php
 require_once 'db/connection.php';
+require_once 'db/util.php';
 
 function create_tag(string $name)
 {
@@ -45,9 +46,10 @@ function get_tag(int $id)
     return $query->get_result()->fetch_assoc();
 }
 
-function get_all_tags(): array
+function get_all_tags(string $order_by_column = null, bool $order_desc = true): array
 {
-    return get_connection()->query('SELECT * FROM tag')->fetch_all(MYSQLI_ASSOC);
+    $order = make_order_query($order_by_column, $order_desc, ['id', 'name']);
+    return get_connection()->query("SELECT * FROM tag{$order}")->fetch_all(MYSQLI_ASSOC);
 }
 
 function delete_tag(int $id): bool
