@@ -5,20 +5,19 @@ const SUBSCRIPTION_PREFIX = 'subscription_';
 
 function get_or_create_permission(string $internal_name, string $description): int
 {
-    get_connection()->begin_transaction();
-    $query = get_connection()->prepare('INSERT INTO permission(internal_name, description) VALUES (?, ?)');
-    $query->bind_param('ss', $internal_name, $description);
-    try {
+    $existing_permission = get_permission_by_name($internal_name);
+    if (!isset($existing_permission['id'])) {
+        get_connection()->begin_transaction();
+        $query = get_connection()->prepare('INSERT INTO permission(internal_name, description) VALUES (?, ?)');
+        $query->bind_param('ss', $internal_name, $description);
         $query->execute();
         get_connection()->commit();
         return $query->insert_id;
-    } catch (mysqli_sql_exception $exception) {
-        get_connection()->commit();
-        return get_permission_by_name($internal_name)['id'];
     }
+    return $existing_permission['id'];
 }
 
-function get_permission_by_name(string $internal_name): array
+function get_permission_by_name(string $internal_name)
 {
     $query = get_connection()->prepare('SELECT id FROM permission WHERE internal_name = ?');
     $query->bind_param('s', $internal_name);
