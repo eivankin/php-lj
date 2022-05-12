@@ -6,6 +6,8 @@ require_once 'db/tag/util.php';
 require_once 'db/blog_entry/util.php';
 require_once 'db/blog_entry/views.php';
 
+
+// TODO: create db and tables
 echo create_user('example@mail.ru', 'admin', 'admin');
 add_permission_to_user(1, ADMIN);
 add_permission_to_user(1, MODERATOR);
@@ -24,6 +26,7 @@ create_tag('Тестовый тег');
 create_tag('Второй тестовый тег');
 
 publish(1, 'Тестовая публикация для подписчиков', 'Привет, подписчики!', 1, [1, 2], [$subscription_on_admin]);
+sleep(1);
 publish(2, 'Тестовая публикация для всех', 'Привет, мир!', 2, [1], [2]);
 
 create_view(1, 1);

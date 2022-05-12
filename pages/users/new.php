@@ -12,7 +12,7 @@ if (!has_permission($_SESSION['user_id'], ADMIN)) {
     isset($_POST['login']) && isset($_POST['password'])) {
     $message = create_user($_POST['email'], $_POST['login'], $_POST['password']);
 } else {
-    $content = '<form method="post">
+    $content = '<form class="fixed-width" method="post">
     <div>
         <label for="login">Логин</label>
         <input type="text" name="login" id="login" required>

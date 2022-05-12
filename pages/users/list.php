@@ -12,7 +12,7 @@ if ($is_admin)
 $content .= '<table><thead><tr>
 <th>№</th><th>Имя пользователя</th><th>Последний вход на сайт</th><th>Действия</th>
 </tr></thead><tbody>';
-$db = get_connection();
+
 foreach (get_all_users() as $user) {
     $actions = '<a href="./' . $user['id'] . '/subscribe">Подписаться</a>' .
         ' | <a href="./' . $user['id'] . '/unsubscribe">Отписаться</a>';

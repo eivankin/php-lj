@@ -186,6 +186,9 @@ function get_most_popular(int $limit = 5): array
 function get_subscription_entries(int $user_id, int $limit = null, string $order_by_column = 'published', bool $order_desc = true): array
 {
     $subscribed_on = get_subscriptions($user_id);
+    if (count($subscribed_on) == 0)
+        return [];
+
     $params = str_repeat('?,', count($subscribed_on) - 1) . '?';
     $bind_list = str_repeat('i', count($subscribed_on));
 

@@ -25,15 +25,6 @@ function get_permission_by_name(string $internal_name)
     return $query->get_result()->fetch_assoc();
 }
 
-function get_permission(int $id): array
-{
-    $query = get_connection()->prepare('SELECT * FROM permission WHERE id = ?');
-    $query->bind_param('i', $id);
-    $query->execute();
-
-    return $query->get_result()->fetch_assoc();
-}
-
 function has_permission(int $user_id, int $permission_id): bool
 {
     $query = get_connection()->prepare('SELECT * FROM user_to_permission WHERE user_id = ? AND permission_id = ?');

@@ -1,11 +1,11 @@
 <?php
 require_once 'pages/util.php';
 
-$url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+define('URL', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
 function handle_url_with_id(array $urls, array $matches, int $id_group = 1, int $action_position = 3) {
     $id = $matches[$id_group];
-    $action = explode('/', $_SERVER['REQUEST_URI'])[$action_position];
+    $action = explode('/', URL)[$action_position];
 
     if (!isset($action)) {
         require_once $urls[0];
@@ -36,11 +36,11 @@ $urls = array(
     '/tags/new' => 'pages/tags/new.php'
 );
 
-if (isset($urls[$url])) {
-    require_once $urls[$url];
+if (isset($urls[URL])) {
+    require_once $urls[URL];
     exit();
 }
-if (preg_match('/\/users\/(\d+).*/', $url, $matches)) {
+if (preg_match('/\/users\/(\d+).*/', URL, $matches)) {
     handle_url_with_id(array('pages/users/show.php',
         'subscribe' => 'pages/users/subscribe.php',
         'unsubscribe' => 'pages/users/unsubscribe.php',
@@ -51,19 +51,19 @@ if (preg_match('/\/users\/(\d+).*/', $url, $matches)) {
         'permissions' => 'pages/users/permissions.php'), $matches);
 }
 
-if (preg_match('/\/entries\/(\d+).*/', $url, $matches)) {
+if (preg_match('/\/entries\/(\d+).*/', URL, $matches)) {
     handle_url_with_id(array('pages/entries/show.php',
         'delete' => 'pages/entries/delete.php',
         'edit' => 'pages/entries/edit.php'), $matches);
 }
 
-if (preg_match('/\/categories\/(\d+).*/', $url, $matches)) {
+if (preg_match('/\/categories\/(\d+).*/', URL, $matches)) {
     handle_url_with_id(array('pages/categories/show.php',
         'delete' => 'pages/categories/delete.php',
         'edit' => 'pages/categories/edit.php'), $matches);
 }
 
-if (preg_match('/\/tags\/(\d+).*/', $url, $matches)) {
+if (preg_match('/\/tags\/(\d+).*/', URL, $matches)) {
     handle_url_with_id(array('pages/tags/show.php',
         'delete' => 'pages/tags/delete.php',
         'edit' => 'pages/tags/edit.php'), $matches);
