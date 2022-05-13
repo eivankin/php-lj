@@ -1,7 +1,13 @@
 <?php
+// Заставляем базу данных не молчать об ошибках и вызывать исключения в случае ошибки.
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-function &get_connection(): mysqli {
+/**
+ * Эта функция создаёт подключение к базе данных при первом вызове и
+ * передаёт ссылку на существующее подключение при всех последующих вызовах.
+ */
+function &get_connection(): mysqli
+{
     static $db = null;
 
     if ($db === null) {

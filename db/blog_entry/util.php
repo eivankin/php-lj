@@ -4,6 +4,14 @@ require_once 'db/tag/util.php';
 require_once 'db/permission/built-in.php';
 require_once 'db/util.php';
 
+/**
+ * Эта функция выполняет все необходимые действия для публикации материала:
+ * создаёт сам материал, связывает с ним теги и разрешения.
+ *
+ * Принимает на вход атрибуты публикации, массив ID тегов и прав для просмотра публикации.
+ *
+ * Возвращает сообщение с информацией об успешности публикации материала.
+ */
 function publish(int   $user_id, string $title, string $content, int $category_id,
                  array $tags, array $permissions): string
 {
@@ -16,7 +24,7 @@ function publish(int   $user_id, string $title, string $content, int $category_i
             add_tag_to_entry($tag, $entry_id);
         }
     } catch (mysqli_sql_exception $exception) {
-        return 'Не удалось связать публикацию с тегами. Перейдите к реактированию и попробуйте ещё раз.';
+        return 'Не удалось связать публикацию с тегами. Перейдите к редактированию и попробуйте ещё раз.';
     }
 
     try {
@@ -24,13 +32,17 @@ function publish(int   $user_id, string $title, string $content, int $category_i
             add_permission_to_entry($entry_id, $permission);
         }
     } catch (mysqli_sql_exception $exception) {
-        return 'Не удалось связать публикацию с разрешениями для просмотра. Перейдите к реактированию и попробуйте ещё раз.';
+        return 'Не удалось связать публикацию с разрешениями для просмотра. Перейдите к редактированию и попробуйте ещё раз.';
     }
 
     return 'Успешно опубликовано.';
 }
 
-
+/**
+ * Эта функция создаёт публикацию в базе данных, не затрагивая никакие связанные сущности.
+ *
+ * Возвращает ID созданной публикации в случае успеха, иначе -1.
+ */
 function create_entry(int $user_id, string $title, string $content, int $category_id): int
 {
     try {
@@ -46,7 +58,12 @@ function create_entry(int $user_id, string $title, string $content, int $categor
     }
 }
 
-
+/**
+ * Эта функция возвращает список из всех публикаций, соответствующих переданным параметрам фильтрации и
+ * ограничениям по количеству.
+ *
+ * Возвращает ассоциативный массив из публикаций.
+ */
 function get_entries(string $title_like = null, string $content_like = null,
                      int    $category_id = null, int $author_id = null,
                      array  $tags_in = null, bool $join_by_and = true,
@@ -103,7 +120,9 @@ function get_entries(string $title_like = null, string $content_like = null,
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-
+/**
+ * Эта функция возвращает публикацию по её ID.
+ */
 function get_entry(int $id)
 {
     $query = get_connection()->prepare('SELECT * FROM blog_entry WHERE id = ?');
@@ -113,6 +132,12 @@ function get_entry(int $id)
     return $query->get_result()->fetch_assoc();
 }
 
+/**
+ * Эта функция выполняет все необходимые действия для редактирования публикации: обновляет саму публикацию,
+ * отвязывает старые (убранные из списка) и привязывает новые (добавленные в список) теги и права для просмотра.
+ *
+ * Возвращает сообщение об успешности выполнения редактирования.
+ */
 function edit(int    $entry_id, string $title,
               string $content, int $category_id,
               array  $tags, array $permissions,
@@ -145,6 +170,11 @@ function edit(int    $entry_id, string $title,
     return 'Публикация успешно обновлена';
 }
 
+/**
+ * Эта функция обновляет публикацию в базе данных, не затрагивая никакие связанные сущности.
+ *
+ * Возвращает успешность операции (true или false).
+ */
 function update_entry(int $entry_id, string $title, string $content, int $category_id): bool
 {
     try {
@@ -159,6 +189,9 @@ function update_entry(int $entry_id, string $title, string $content, int $catego
     }
 }
 
+/**
+ * Эта функция удаляет публикацию по её ID.
+ */
 function delete_entry(int $id): bool
 {
     try {
@@ -173,6 +206,10 @@ function delete_entry(int $id): bool
     }
 }
 
+/**
+ * Эта функция возвращает список самых популярных публикаций по их просмотрам.
+ * Принимает на вход требуемое количество возвращённых публикаций (по умолчанию - 5).
+ */
 function get_most_popular(int $limit = 5): array
 {
     $query = get_connection()->prepare('SELECT blog_entry.*, COUNT(entry_id) AS views_count from blog_entry 
@@ -183,6 +220,12 @@ function get_most_popular(int $limit = 5): array
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
+/**
+ * Эта функция возвращает список публикаций от авторов, на которых подписан пользователь.
+ * Принимает на вход ID пользователя, параметры сортировки (по умолчанию - самые новые публикации в начале списка)
+ * и ограничение по количеству возвращаемых публикаций.
+ * Обязательным параметром является только ID пользователя.
+ */
 function get_subscription_entries(int $user_id, int $limit = null, string $order_by_column = 'published', bool $order_desc = true): array
 {
     $subscribed_on = get_subscriptions($user_id);
