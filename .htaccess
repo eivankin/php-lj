@@ -10,6 +10,10 @@ AddCharset UTF-8 .html
 </FilesMatch>
 Header set X-Content-Type-Options nosniff
 
+<FilesMatch "fill_db\.php|create-db\.sql|\.htaccess">
+    Deny from all
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
 # enable rewrite engine
 RewriteEngine On
