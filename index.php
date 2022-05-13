@@ -15,7 +15,8 @@ define('URL', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
  * Эта функция обрабатывает URL, внутри которых передаётся ID сущности из базы данных.
  * На вход принимается словарь, связывающий действие над сущностью со скриптом-обработчиком.
  */
-function handle_url_with_id(array $urls, array $matches, int $id_group = 1, int $action_position = 3) {
+function handle_url_with_id(array $urls, array $matches, int $id_group = 1, int $action_position = 3)
+{
     $id = $matches[$id_group];
     $action = explode('/', URL)[$action_position];
 
@@ -48,7 +49,7 @@ $urls = array(
     '/entries/' => 'pages/entries/list.php',
     '/entries/new' => 'pages/entries/new.php',
     '/users/' => 'pages/users/list.php',
-    '/users/new' =>  'pages/users/new.php',
+    '/users/new' => 'pages/users/new.php',
     '/categories/' => 'pages/categories/list.php',
     '/categories/new' => 'pages/categories/new.php',
     '/tags/' => 'pages/tags/list.php',
