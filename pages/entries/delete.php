@@ -1,4 +1,9 @@
 <?php
+/**
+ * Страница удаления публикации.
+ * Публикации могут удалять только их авторы, администраторы и модераторы.
+ */
+
 require_once 'pages/util.php';
 require_once 'db/blog_entry/util.php';
 require_once 'db/permission/built-in.php';

@@ -3,6 +3,10 @@ require_once 'db/user/util.php';
 require_once 'pages/util.php';
 require_once 'db/permission/util.php';
 
+/**
+ * Функция, генерирующая HTML-таблицу с информацией о пользователе (имя, дата последнего входа, количество подписчиков).
+ * Принимает на вход ID пользователя.
+ */
 function get_info(int $user_id): string
 {
     $user = get_user($user_id);
@@ -33,7 +37,7 @@ function get_info(int $user_id): string
 }
 
 /**
- * Общая часть для подписки и отписки от пользователя, вынесена отдельно для исключения повторений.
+ * Общая часть для подписки и отписки от пользователя, вынесена отдельно для исключения повторений кода.
  */
 function handle_subscription($id, string $action = '/subscribe'): int
 {

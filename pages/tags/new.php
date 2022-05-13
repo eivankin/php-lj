@@ -1,4 +1,9 @@
 <?php
+/**
+ * Страница создания тегов.
+ * Только администраторы могут создавать теги.
+ */
+
 require_once 'db/permission/built-in.php';
 require_once 'db/tag/util.php';
 

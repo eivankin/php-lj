@@ -1,4 +1,9 @@
 <?php
+/**
+ * Страница блокировки (лишения права на публикацию материалов) пользователя.
+ * Только модераторы могут пользоваться этой страницей.
+ */
+
 require_once 'pages/util.php';
 require_once 'db/permission/built-in.php';
 require_once 'db/user/util.php';

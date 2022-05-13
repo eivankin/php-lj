@@ -3,6 +3,10 @@ require_once 'db/user/util.php';
 require_once 'db/category/util.php';
 require_once 'db/tag/util.php';
 
+
+/**
+ * Эта функция генерирует HTML-карточку публикации на основе словаря с атрибутами публикации.
+ */
 function make_entry_card(array $entry): string
 {
     $author = get_user($entry['author_id']);

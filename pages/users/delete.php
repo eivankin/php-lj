@@ -1,4 +1,10 @@
 <?php
+/**
+ * Страница удаления пользователя.
+ * Только администраторы могут удалять пользователей.
+ * Администратор не может удалить свой собственный аккаунт.
+ */
+
 require_once 'pages/util.php';
 require_once 'db/permission/built-in.php';
 require_once 'db/user/util.php';

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Страница редактирования тега.
+ * Теги могут редактировать только администраторы.
+ */
+
 require_once 'db/permission/built-in.php';
 require_once 'db/tag/util.php';
 require_once 'pages/util.php';

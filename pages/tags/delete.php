@@ -1,4 +1,8 @@
 <?php
+/**
+ * Страница удаления тега.
+ * Теги могут удалять только администраторы.
+ */
 
 require_once 'pages/util.php';
 require_once 'db/permission/built-in.php';

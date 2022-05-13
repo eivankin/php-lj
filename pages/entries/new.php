@@ -1,4 +1,9 @@
 <?php
+/**
+ * Страница создания публикаций.
+ * Только пользователю с правом на публикацию материалов могут создавать публикации.
+ */
+
 require_once 'pages/util.php';
 require_once 'db/permission/built-in.php';
 require_once 'db/category/util.php';

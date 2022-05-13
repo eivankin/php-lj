@@ -1,4 +1,9 @@
 <?php
+/**
+ * Страница создания категорий.
+ * Только администраторы могут создавать категории.
+ */
+
 require_once 'db/permission/built-in.php';
 require_once 'db/category/util.php';
 
