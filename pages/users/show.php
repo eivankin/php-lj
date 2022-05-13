@@ -14,7 +14,7 @@ if ($id == $_SESSION['user_id']) {
     header('Location: /account');
 }
 
-if (has_permission($_SESSION['user_id'], get_subscription_id($id))) {
+if (has_user_permission($_SESSION['user_id'], get_subscription_id($id))) {
     $content = "<p><a href='./{$id}/unsubscribe'><button>Отписаться</button></a></p>";
 } else {
     $content = "<p><a href='./{$id}/subscribe'><button>Подписаться</button></a></p>";

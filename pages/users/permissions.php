@@ -10,7 +10,7 @@ if (!isset($id))
 
 handle_page_with_id($id, 'users', '/permissions');
 
-if (!has_permission($_SESSION['user_id'], ADMIN)) {
+if (!has_user_permission($_SESSION['user_id'], ADMIN)) {
     $message = 'У вас нет прав для управления разрешениями пользователей';
     http_response_code(403);
     exit();

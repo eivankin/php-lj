@@ -3,7 +3,7 @@ require_once 'db/category/util.php';
 require_once 'db/permission/built-in.php';
 $title = 'Список категорий';
 
-$is_admin = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], ADMIN);
+$is_admin = isset($_SESSION['user_id']) && has_user_permission($_SESSION['user_id'], ADMIN);
 
 $content = "
 <form style='width: 300px'>
@@ -63,7 +63,7 @@ $content .= '
     <tbody>';
 
 
-foreach (get_all_categories($_GET['order_by'], $_GET['order'] ?? true) as $category) {
+foreach (get_categories($_GET['order_by'], $_GET['order'] ?? true) as $category) {
     $actions = "<a href='/entries/?category={$category['id']}'>Просмотреть публикации</a>";
 
     if ($is_admin) {

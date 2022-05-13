@@ -3,6 +3,11 @@ require_once 'db/connection.php';
 
 const SUBSCRIPTION_PREFIX = 'subscription_';
 
+/**
+ * Эта функция пытается найти существующее разрешение по его уникальному имени, иначе создаёт его.
+ *
+ * Возвращает ID найденного или созданного разрешения.
+ */
 function get_or_create_permission(string $internal_name, string $description): int
 {
     $existing_permission = get_permission_by_name($internal_name);
@@ -17,6 +22,11 @@ function get_or_create_permission(string $internal_name, string $description): i
     return $existing_permission['id'];
 }
 
+/**
+ * Эта функция возвращает разрешение по его внутреннему уникальному имени.
+ *
+ * Возвращает null если разрешения не существует.
+ */
 function get_permission_by_name(string $internal_name)
 {
     $query = get_connection()->prepare('SELECT id FROM permission WHERE internal_name = ?');
@@ -25,7 +35,11 @@ function get_permission_by_name(string $internal_name)
     return $query->get_result()->fetch_assoc();
 }
 
-function has_permission(int $user_id, int $permission_id): bool
+/**
+ * Эта функция проверяет наличие права у пользователя.
+ * Принимает на вход ID пользователя и разрешения.
+ */
+function has_user_permission(int $user_id, int $permission_id): bool
 {
     $query = get_connection()->prepare('SELECT * FROM user_to_permission WHERE user_id = ? AND permission_id = ?');
     $query->bind_param('ii', $user_id, $permission_id);
@@ -33,6 +47,10 @@ function has_permission(int $user_id, int $permission_id): bool
     return isset($query->get_result()->fetch_assoc()['user_id']);
 }
 
+/**
+ * Эта функция добавляет разрешение пользователю.
+ * Принимает на вход ID пользователя и разрешения.
+ */
 function add_permission_to_user(int $user_id, int $permission_id)
 {
     get_connection()->begin_transaction();
@@ -42,6 +60,10 @@ function add_permission_to_user(int $user_id, int $permission_id)
     get_connection()->commit();
 }
 
+/**
+ * Эта функция забирает разрешение у пользователя.
+ * Принимает на вход ID пользователя и разрешения.
+ */
 function remove_permission_from_user(int $user_id, int $permission_id)
 {
     get_connection()->begin_transaction();
@@ -51,6 +73,10 @@ function remove_permission_from_user(int $user_id, int $permission_id)
     get_connection()->commit();
 }
 
+/**
+ * Эта функция проверяет наличие хотя бы одного разрешения из списка у пользователя.
+ * Принимает на вход ID пользователя и список ID разрешений.
+ */
 function has_any_permission(int $user_id, array $permission_ids): bool
 {
     $values = str_repeat('?,', count($permission_ids) - 1) . '?';
@@ -60,6 +86,9 @@ function has_any_permission(int $user_id, array $permission_ids): bool
     return isset($query->get_result()->fetch_assoc()['user_id']);
 }
 
+/**
+ * Эта функция возвращает список разрешений конкретного пользователя.
+ */
 function get_user_permissions(int $user_id): array
 {
     $query = get_connection()->prepare('SELECT * FROM permission WHERE id IN 
@@ -69,11 +98,19 @@ function get_user_permissions(int $user_id): array
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
+/**
+ * Эта функция возвращает список всех существующих разрешений.
+ */
 function get_all_permissions(): array
 {
     return get_connection()->query('SELECT * FROM permission')->fetch_all(MYSQLI_ASSOC);
 }
 
+/**
+ * Эта функция возвращает число подписчиков конкретного пользователя.
+ * Так как подписки реализованы через разрешения, то эта функция находится в том же файле,
+ * что и другие функции по работе с разрешениями.
+ */
 function get_subscribers_count(int $user_id): int
 {
     $query = get_connection()->prepare('SELECT COUNT(*) as count FROM user_to_permission WHERE permission_id = ?');
@@ -84,6 +121,10 @@ function get_subscribers_count(int $user_id): int
     return $query->get_result()->fetch_assoc()['count'];
 }
 
+/**
+ * Эта функция добавляет право к списку необходимых для просмотра публикации.
+ * Принимает на вход ID разрешения и публикации.
+ */
 function add_permission_to_entry(int $entry_id, int $permission_id)
 {
     get_connection()->begin_transaction();
@@ -93,6 +134,10 @@ function add_permission_to_entry(int $entry_id, int $permission_id)
     get_connection()->commit();
 }
 
+/**
+ * Эта функция удаляет право из списка необходимых для просмотра публикации.
+ * Принимает на вход ID разрешения и публикации.
+ */
 function remove_permission_from_entry(int $entry_id, int $permission_id)
 {
     get_connection()->begin_transaction();
@@ -102,6 +147,10 @@ function remove_permission_from_entry(int $entry_id, int $permission_id)
     get_connection()->commit();
 }
 
+/**
+ * Эта функция получает список прав, необходимых для просмотра публикации.
+ * Принимает на вход ID публикации.
+ */
 function get_entry_permissions(int $entry_id): array
 {
     $query = get_connection()->prepare('SELECT * FROM permission WHERE id IN 
@@ -111,6 +160,10 @@ function get_entry_permissions(int $entry_id): array
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
+/**
+ * Эта функция получает список прав, необходимых для просмотра публикации.
+ * Принимает на вход ID публикации.
+ */
 function has_entry_permission(int $entry_id, int $permission_id): bool
 {
     $query = get_connection()->prepare('SELECT * FROM entry_to_permission WHERE entry_id = ? AND permission_id = ?');
@@ -119,11 +172,20 @@ function has_entry_permission(int $entry_id, int $permission_id): bool
     return isset($query->get_result()->fetch_assoc()['entry_id']);
 }
 
-function get_subscription_id(int $id): int
+/**
+ * Эта функция возвращает ID разрешения, соответствующего подписке на конкретного пользователя.
+ * Принимает на вход ID пользователя.
+ */
+function get_subscription_id(int $user_id): int
 {
-    return get_or_create_permission(SUBSCRIPTION_PREFIX . $id, 'Подписка на пользователя с ID ' . $id);
+    return get_or_create_permission(SUBSCRIPTION_PREFIX . $user_id,
+        'Подписка на пользователя с ID ' . $user_id);
 }
 
+/**
+ * Эта функция возвращает список ID пользователей, на которых подписан конкретный пользователь.
+ * Принимает на вход ID пользователя.
+ */
 function get_subscriptions(int $user_id): array
 {
     $prefix = SUBSCRIPTION_PREFIX;

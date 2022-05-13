@@ -4,8 +4,8 @@ require_once 'db/user/util.php';
 require_once 'db/category/util.php';
 require_once 'db/blog_entry/views.php';
 
-$is_admin = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], ADMIN);
-$is_moderator = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], MODERATOR);
+$is_admin = isset($_SESSION['user_id']) && has_user_permission($_SESSION['user_id'], ADMIN);
+$is_moderator = isset($_SESSION['user_id']) && has_user_permission($_SESSION['user_id'], MODERATOR);
 
 
 $title = 'Публикации';
@@ -39,7 +39,7 @@ $content .= "
         <select id='category' name='category'>
             <option value=''>Выберите категорию</option>";
 
-foreach (get_all_categories() as $category) {
+foreach (get_categories() as $category) {
     $selected = ($category['id'] == $_GET['category']) ? ' selected' : '';
     $content .= "<option value='{$category['id']}'{$selected}>{$category['name']}</option>";
 }

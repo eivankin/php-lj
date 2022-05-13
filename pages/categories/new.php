@@ -4,7 +4,7 @@ require_once 'db/category/util.php';
 
 $title = 'Добавление категории';
 
-if (!has_permission($_SESSION['user_id'], ADMIN)) {
+if (!has_user_permission($_SESSION['user_id'], ADMIN)) {
     $message = 'У вас нет прав на создание категорий';
     http_response_code(403);
     exit();
@@ -31,7 +31,7 @@ $content = '
             <option value="">Выберите категорию</option>
 ';
 
-foreach (get_all_categories() as $category) {
+foreach (get_categories() as $category) {
     $content .= "<option value='{$category['id']}'>{$category['name']}</option>";
 }
 

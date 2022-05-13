@@ -11,7 +11,7 @@ $title = 'Редактирование пользователя';
 $is_the_same_user = $_SESSION['user_id'] == $id;
 $user = get_user($id);
 
-if (!$is_the_same_user && !has_permission($_SESSION['user_id'], ADMIN)) {
+if (!$is_the_same_user && !has_user_permission($_SESSION['user_id'], ADMIN)) {
     $message = 'У вас нет прав на редактирования данных этого пользователя';
     http_response_code(403);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email']) &&

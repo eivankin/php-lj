@@ -2,8 +2,8 @@
 require_once 'db/permission/built-in.php';
 require_once 'db/user/util.php';
 $title = 'Пользователи';
-$is_admin = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], ADMIN);
-$is_moderator = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], MODERATOR);
+$is_admin = isset($_SESSION['user_id']) && has_user_permission($_SESSION['user_id'], ADMIN);
+$is_moderator = isset($_SESSION['user_id']) && has_user_permission($_SESSION['user_id'], MODERATOR);
 
 $content = '';
 if ($is_admin)

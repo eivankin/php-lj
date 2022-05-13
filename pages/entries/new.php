@@ -8,7 +8,7 @@ require_once 'db/tag/util.php';
 login_required('/entries/new');
 
 $title = 'Добавить публикацию';
-if (has_permission($_SESSION['user_id'], CAN_PUBLISH)) {
+if (has_user_permission($_SESSION['user_id'], CAN_PUBLISH)) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) &&
         isset($_POST['content']) && isset($_POST['category'])) {
         $message = publish($_SESSION['user_id'], $_POST['title'], $_POST['content'], $_POST['category'],
@@ -30,7 +30,7 @@ if (has_permission($_SESSION['user_id'], CAN_PUBLISH)) {
         <select id="category" name="category" required>
             <option value="">Выберите категорию</option>';
 
-        foreach (get_all_categories() as $category) {
+        foreach (get_categories() as $category) {
             $content .= "<option value='{$category['id']}'>{$category['name']}</option>";
         }
 

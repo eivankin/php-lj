@@ -17,7 +17,7 @@ if (!isset($entry)) {
 
 $title = 'Редактирование публикации';
 
-if ($_SESSION['user_id'] == $entry['author_id'] || has_permission($_SESSION['user_id'], ADMIN)) {
+if ($_SESSION['user_id'] == $entry['author_id'] || has_user_permission($_SESSION['user_id'], ADMIN)) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) &&
         isset($_POST['content']) && isset($_POST['category'])) {
         $message = edit($entry['id'], $_POST['title'], $_POST['content'], $_POST['category'],
@@ -40,7 +40,7 @@ if ($_SESSION['user_id'] == $entry['author_id'] || has_permission($_SESSION['use
         <select id="category" name="category" required>
             <option value="">Выберите категорию</option>';
 
-        foreach (get_all_categories() as $category) {
+        foreach (get_categories() as $category) {
             $selected = ($category['id'] == $entry['category_id']) ? ' selected' : '';
             $content .= "<option value='{$category['id']}'{$selected}>{$category['name']}</option>";
         }

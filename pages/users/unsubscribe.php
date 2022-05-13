@@ -5,7 +5,7 @@ if (!isset($id))
     $id = null;
 
 $permission_id = handle_subscription($id);
-if (has_permission($_SESSION['user_id'], $permission_id)) {
+if (has_user_permission($_SESSION['user_id'], $permission_id)) {
     remove_permission_from_user($_SESSION['user_id'], $permission_id);
     $message = 'Вы успешно отписались от выбранного пользователя';
 } else {

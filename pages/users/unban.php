@@ -13,7 +13,7 @@ $user = get_user($id);
 if (!isset($user))
     not_found();
 
-if (has_permission($_SESSION['user_id'], MODERATOR)) {
+if (has_user_permission($_SESSION['user_id'], MODERATOR)) {
     add_permission_to_user($id, CAN_PUBLISH);
     $message = 'Выбранный пользователь теперь может публиковать материалы';
 } else {

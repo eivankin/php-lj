@@ -3,7 +3,7 @@ require_once 'db/tag/util.php';
 require_once 'db/permission/built-in.php';
 $title = 'Список тегов';
 
-$is_admin = isset($_SESSION['user_id']) && has_permission($_SESSION['user_id'], ADMIN);
+$is_admin = isset($_SESSION['user_id']) && has_user_permission($_SESSION['user_id'], ADMIN);
 
 $content = "
 <form style='width: 300px'>

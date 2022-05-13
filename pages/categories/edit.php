@@ -14,7 +14,7 @@ $category = get_category($id);
 if (!isset($category))
     not_found();
 
-if (!has_permission($_SESSION['user_id'], ADMIN)) {
+if (!has_user_permission($_SESSION['user_id'], ADMIN)) {
     $message = 'У вас нет прав на редактирование категорий';
     http_response_code(403);
     exit();
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
             <option value="">Выберите категорию</option>
 ';
 
-    foreach (get_all_categories() as $cat) {
+    foreach (get_categories() as $cat) {
         $selected = ($category['parent_id'] == $cat['id']) ? ' selected' : '';
         if ($cat['id'] != $category['id'])
             $content .= "<option value='{$cat['id']}'{$selected}>{$cat['name']}</option>";

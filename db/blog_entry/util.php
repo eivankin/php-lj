@@ -60,7 +60,7 @@ function create_entry(int $user_id, string $title, string $content, int $categor
 
 /**
  * Эта функция возвращает список из всех публикаций, соответствующих переданным параметрам фильтрации и
- * ограничениям по количеству.
+ * ограничениям по количеству, а также отсортированный согласно переданным параметрам.
  *
  * Возвращает ассоциативный массив из публикаций.
  */
@@ -122,6 +122,8 @@ function get_entries(string $title_like = null, string $content_like = null,
 
 /**
  * Эта функция возвращает публикацию по её ID.
+ *
+ * Если публикация не найдена, возвращает null.
  */
 function get_entry(int $id)
 {
@@ -191,6 +193,7 @@ function update_entry(int $entry_id, string $title, string $content, int $catego
 
 /**
  * Эта функция удаляет публикацию по её ID.
+ * Связки публикации с тегами и правами будут удалены автоматически на стороне базы данных.
  */
 function delete_entry(int $id): bool
 {

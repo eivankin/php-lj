@@ -4,7 +4,7 @@ require_once 'db/tag/util.php';
 
 $title = 'Добавление тега';
 
-if (!has_permission($_SESSION['user_id'], ADMIN)) {
+if (!has_user_permission($_SESSION['user_id'], ADMIN)) {
     $message = 'У вас нет прав на создание тегов';
     http_response_code(403);
     exit();

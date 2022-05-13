@@ -8,7 +8,7 @@ if (!isset($id))
     $id = null;
 handle_page_with_id($id, 'users', '/delete');
 
-if ($_SESSION['user_id'] == $id || !has_permission($_SESSION['user_id'], ADMIN)) {
+if ($_SESSION['user_id'] == $id || !has_user_permission($_SESSION['user_id'], ADMIN)) {
     $message = 'У вас нет прав на удаление этого пользователя';
     http_response_code(403);
 } else {

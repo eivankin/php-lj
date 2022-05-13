@@ -3,14 +3,24 @@
 require_once 'db/connection.php';
 require_once 'db/util.php';
 
-function get_all_categories(string $order_by_column = null, bool $order_desc = true): array
+/**
+ * Эта функция возвращает список из всех категорий, отсортированный согласно переданным параметрам.
+ *
+ * Возвращает ассоциативный массив из категорий.
+ */
+function get_categories(string $order_by_column = null, bool $order_desc = true): array
 {
     $order = make_order_query($order_by_column, $order_desc, ['id', 'name', 'parent_id']);
     return get_connection()->query("SELECT * FROM category{$order}")->fetch_all(MYSQLI_ASSOC);
 }
 
-
-function create_category(string $name, $parent_id)
+/**
+ * Эта функция создаёт категорию в базе данных.
+ * Принимает на вход название и ID родительской категории.
+ *
+ * Категория может не иметь родителя, в таком случае она является корневой.
+ */
+function create_category(string $name, int $parent_id = null)
 {
     get_connection()->begin_transaction();
     if (isset($parent_id) && $parent_id != 0) {
@@ -24,6 +34,10 @@ function create_category(string $name, $parent_id)
     get_connection()->commit();
 }
 
+/**
+ * Эта функция обновляет категорию в базе данных.
+ * Принимает на вход ID текущей категории, название и ID родительской категории.
+ */
 function update_category(int $id, string $name, int $parent_id)
 {
     get_connection()->begin_transaction();
@@ -33,6 +47,11 @@ function update_category(int $id, string $name, int $parent_id)
     get_connection()->commit();
 }
 
+/**
+ * Эта функция удаляет категорию по её ID.
+ *
+ * Возвращает успешность выполнения удаления (true или false).
+ */
 function delete_category(int $id): bool
 {
     try {
@@ -47,6 +66,11 @@ function delete_category(int $id): bool
     }
 }
 
+/**
+ * Эта функция возвращает категорию по её ID.
+ *
+ * Если категория не найдена, возвращает null.
+ */
 function get_category(int $id)
 {
     $query = get_connection()->prepare('SELECT * FROM category WHERE id = ?');

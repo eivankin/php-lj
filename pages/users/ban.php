@@ -14,7 +14,7 @@ $user = get_user($id);
 if (!isset($user))
     not_found();
 
-if (has_permission($_SESSION['user_id'], MODERATOR)) {
+if (has_user_permission($_SESSION['user_id'], MODERATOR)) {
     remove_permission_from_user($id, CAN_PUBLISH);
     $message = 'Выбранный пользователь успешно лишён прав на публикацию материалов';
 } else {

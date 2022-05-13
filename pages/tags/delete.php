@@ -11,7 +11,7 @@ if (!isset($id))
 
 handle_page_with_id($id, 'tags', '/delete');
 
-if (!has_permission($_SESSION['user_id'], ADMIN)) {
+if (!has_user_permission($_SESSION['user_id'], ADMIN)) {
     $message = 'У вас нет прав на удаление тегов';
     http_response_code(403);
 } else {

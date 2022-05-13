@@ -14,7 +14,7 @@ $tag = get_tag($id);
 if (!isset($tag))
     not_found();
 
-if (!has_permission($_SESSION['user_id'], ADMIN)) {
+if (!has_user_permission($_SESSION['user_id'], ADMIN)) {
     $message = 'У вас нет прав на редактирование тегов';
     http_response_code(403);
     exit();
