@@ -2,6 +2,10 @@
 require_once 'db/blog_entry/util.php';
 require_once 'pages/entries/util.php';
 
+/**
+ * Главная страница с виджетом популярных публикаций и свежих публикаций среди подписок.
+ */
+
 $title = 'Главная страница';
 $content = '<h1>Добро пожаловать</h1>';
 

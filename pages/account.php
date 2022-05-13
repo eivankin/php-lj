@@ -5,6 +5,10 @@ require_once 'pages/users/util.php';
 require_once 'pages/entries/util.php';
 require_once 'db/blog_entry/util.php';
 
+/**
+ * Личный кабинет пользователя с информацией о нём, списком недавних публикаций и подписок.
+ */
+
 login_required('/account');
 
 $title = 'Личный кабинет';
