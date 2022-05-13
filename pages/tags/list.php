@@ -49,7 +49,7 @@ $content .= '
     </thead>
     <tbody>';
 
-foreach (get_all_tags($_GET['order_by'], $_GET['order'] ?? true) as $tag) {
+foreach (get_tags($_GET['order_by'], $_GET['order'] ?? true) as $tag) {
     $actions = "<a href='/entries/?tags[]={$tag['id']}'>Просмотреть публикации</a>";
 
     if ($is_admin) {

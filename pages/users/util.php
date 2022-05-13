@@ -31,3 +31,19 @@ function get_info(int $user_id): string
 </table>";
     return $content;
 }
+
+/**
+ * Общая часть для подписки и отписки от пользователя, вынесена отдельно для исключения повторений.
+ */
+function handle_subscription($id, string $action = '/subscribe'): int
+{
+    require_once 'pages/util.php';
+    require_once 'db/permission/built-in.php';
+
+    handle_page_with_id($id, 'users', $action);
+    $user = get_user($id);
+    if (!isset($user))
+        not_found();
+
+    return get_subscription_id($id);
+}

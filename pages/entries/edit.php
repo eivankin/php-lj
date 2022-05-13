@@ -53,7 +53,7 @@ if ($_SESSION['user_id'] == $entry['author_id'] || has_user_permission($_SESSION
         <select id="tag" name="tag[]" multiple>';
 
         $selected_tags = array();
-        foreach (get_all_tags() as $tag) {
+        foreach (get_tags() as $tag) {
             $selected = '';
             if (has_tag($entry['id'], $tag['id'])) {
                 $selected = ' selected';

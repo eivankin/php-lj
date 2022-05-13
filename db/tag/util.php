@@ -2,6 +2,9 @@
 require_once 'db/connection.php';
 require_once 'db/util.php';
 
+/**
+ * Эта функция создаёт тег в базе данных.
+ */
 function create_tag(string $name)
 {
     get_connection()->begin_transaction();
@@ -11,6 +14,9 @@ function create_tag(string $name)
     get_connection()->commit();
 }
 
+/**
+ * Эта функция обновляет атрибуты тега.
+ */
 function update_tag(int $id, string $name)
 {
     get_connection()->begin_transaction();
@@ -20,6 +26,9 @@ function update_tag(int $id, string $name)
     get_connection()->commit();
 }
 
+/**
+ * Эта функция добавляет тег к публикации.
+ */
 function add_tag_to_entry(int $tag_id, int $entry_id)
 {
     get_connection()->begin_transaction();
@@ -29,6 +38,9 @@ function add_tag_to_entry(int $tag_id, int $entry_id)
     get_connection()->commit();
 }
 
+/**
+ * Эта функция убирает тег у публикации.
+ */
 function remove_tag_from_entry(int $tag_id, int $entry_id)
 {
     get_connection()->begin_transaction();
@@ -38,6 +50,9 @@ function remove_tag_from_entry(int $tag_id, int $entry_id)
     get_connection()->commit();
 }
 
+/**
+ * Эта функция возвращает тег по его ID.
+ */
 function get_tag(int $id)
 {
     $query = get_connection()->prepare('SELECT * FROM tag WHERE id = ?');
@@ -46,12 +61,22 @@ function get_tag(int $id)
     return $query->get_result()->fetch_assoc();
 }
 
-function get_all_tags(string $order_by_column = null, bool $order_desc = true): array
+/**
+ * Эта функция возвращает список из всех тегов, отсортированный согласно переданным параметрам.
+ *
+ * Возвращает ассоциативный массив из тегов.
+ */
+function get_tags(string $order_by_column = null, bool $order_desc = true): array
 {
     $order = make_order_query($order_by_column, $order_desc, ['id', 'name']);
     return get_connection()->query("SELECT * FROM tag{$order}")->fetch_all(MYSQLI_ASSOC);
 }
 
+/**
+ * Эта функция удаляет тег по его ID.
+ *
+ * Связки тега с публикациями будут удалены автоматически на стороне базы данных.
+ */
 function delete_tag(int $id): bool
 {
     try {
@@ -66,7 +91,9 @@ function delete_tag(int $id): bool
     }
 }
 
-
+/**
+ * Эта функция возвращает список тегов публикации.
+ */
 function get_entry_tags(int $entry_id): array
 {
     $query = get_connection()->prepare('SELECT * FROM tag WHERE id IN 
@@ -76,8 +103,11 @@ function get_entry_tags(int $entry_id): array
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-
-function has_tag(int $entry_id, int $tag_id): bool {
+/**
+ * Эта функция проверяет наличие тега у публикации.
+ */
+function has_tag(int $entry_id, int $tag_id): bool
+{
     $query = get_connection()->prepare('SELECT * FROM entry_to_tag WHERE entry_id = ? AND tag_id = ?');
     $query->bind_param('ii', $entry_id, $tag_id);
     $query->execute();

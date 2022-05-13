@@ -41,7 +41,7 @@ if (has_user_permission($_SESSION['user_id'], CAN_PUBLISH)) {
         <label for="tag">Теги</label>
         <select id="tag" name="tag[]" multiple>';
 
-        foreach (get_all_tags() as $tag) {
+        foreach (get_tags() as $tag) {
             $content .= "<option value='{$tag['id']}'>{$tag['name']}</option>";
         }
 

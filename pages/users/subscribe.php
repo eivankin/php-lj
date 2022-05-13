@@ -1,5 +1,6 @@
 <?php
 require_once 'db/user/util.php';
+require_once 'pages/users/util.php';
 
 if (!isset($id))
     $id = null;

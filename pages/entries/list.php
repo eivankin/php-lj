@@ -52,7 +52,7 @@ $content .= "
         <label for='tags'>Теги</label>
         <select id='tags' name='tags[]' multiple>";
 
-foreach (get_all_tags() as $tag) {
+foreach (get_tags() as $tag) {
     $selected = '';
     if (in_array($tag['id'], $_GET['tags'] ?? [])) {
         $selected = ' selected';

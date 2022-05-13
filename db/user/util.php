@@ -2,6 +2,12 @@
 require_once 'db/connection.php';
 require_once 'db/permission/util.php';
 
+/**
+ * Эта функция создаёт нового пользователя в базе данных.
+ * Возвращает сообщение об успешности операции.
+ *
+ * Пароль пользователя сохраняется в хэшированном виде.
+ */
 function create_user(string $email, string $name, string $password): string
 {
     get_connection()->begin_transaction();
@@ -18,6 +24,10 @@ function create_user(string $email, string $name, string $password): string
     return 'Аккаунт успешно создан';
 }
 
+/**
+ * Эта функция проверяет, что существует пользователь с переданным логином и корректность введённого пароля.
+ * В случае успеха обновляет дату последнего входа пользователя и возвращает ID пользователя, иначе -1.
+ */
 function authorize(string $username, string $password): int
 {
     $query = get_connection()->prepare('SELECT id, password_hash FROM user WHERE username = ?');
@@ -36,6 +46,9 @@ function authorize(string $username, string $password): int
     return -1;
 }
 
+/**
+ * Эта функция возвращает пользователя по его ID.
+ */
 function get_user(int $id)
 {
     $query = get_connection()->prepare('SELECT * FROM user WHERE id = ?');
@@ -45,6 +58,9 @@ function get_user(int $id)
     return $query->get_result()->fetch_assoc();
 }
 
+/**
+ * Эта функция обновляет дату последнего входа пользователя на текущее время.
+ */
 function update_last_login(int $id)
 {
     $query = get_connection()->prepare('UPDATE user SET last_login = NOW() WHERE id = ?');
@@ -52,7 +68,10 @@ function update_last_login(int $id)
     $query->execute();
 }
 
-function get_by_email(string $email)
+/**
+ * Эта функция возвращает пользователя по его e-mail.
+ */
+function get_user_by_email(string $email)
 {
     $query = get_connection()->prepare('SELECT id FROM user WHERE email = ?');
     $query->bind_param('s', $email);
@@ -61,6 +80,9 @@ function get_by_email(string $email)
     return $query->get_result()->fetch_assoc()['id'];
 }
 
+/**
+ * Эта функция обновляет пароль пользователя на переданный в качестве параметра.
+ */
 function set_password(int $id, string $password) {
     $query = get_connection()->prepare('UPDATE user SET password_hash = ? WHERE id = ?');
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
@@ -68,6 +90,11 @@ function set_password(int $id, string $password) {
     $query->execute();
 }
 
+/**
+ * Эта функция удаляет пользователя по его ID.
+ *
+ * Материалы, опубликованные пользователем, удалятся автоматически на стороне базы данных.
+ */
 function delete_user(int $id): bool {
     get_connection()->begin_transaction();
     $query = get_connection()->prepare('DELETE FROM user WHERE id = ?');
@@ -77,6 +104,9 @@ function delete_user(int $id): bool {
     return $result;
 }
 
+/**
+ * Эта функция обновляет атрибуты существующего пользователя.
+ */
 function update_user(int $id, string $username, string $email): bool {
     get_connection()->begin_transaction();
     $query = get_connection()->prepare('UPDATE user SET username = ?, email = ? WHERE id = ?');
@@ -90,6 +120,9 @@ function update_user(int $id, string $username, string $email): bool {
     }
 }
 
+/**
+ * Эта функция проверяет корректность пароля пользователя по его ID.
+ */
 function verify_password(int $id, string $password): bool {
     $query = get_connection()->prepare('SELECT password_hash FROM user WHERE id = ?');
 
@@ -99,20 +132,9 @@ function verify_password(int $id, string $password): bool {
     return password_verify($password, $query->get_result()->fetch_assoc()['password_hash']);
 }
 
-function handle_subscription($id): int
-{
-    require_once 'pages/util.php';
-    require_once 'db/permission/built-in.php';
-
-    handle_page_with_id($id, 'users', '/subscribe');
-    $user = get_user($id);
-    if (!isset($user))
-        not_found();
-
-    return get_subscription_id($id);
-}
-
-
+/**
+ * Эта функция возвращает список всех существующих пользователей.
+ */
 function get_all_users(): array {
     return get_connection()->query('SELECT id, username, last_login FROM user')->fetch_all(MYSQLI_ASSOC);
 }

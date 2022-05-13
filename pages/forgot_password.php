@@ -28,7 +28,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
-    $user_id = get_by_email($_POST['email']);
+    $user_id = get_user_by_email($_POST['email']);
     if (!isset($user_id))
         $message = 'Пользователь с таким e-mail не найден';
     else {
