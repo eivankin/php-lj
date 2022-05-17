@@ -55,6 +55,22 @@ CREATE TABLE IF NOT EXISTS `Blog_Entry`
     FOREIGN KEY (`category_id`) REFERENCES `Category` (`id`) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS `Entry_Comment`
+(
+    `id`          int          NOT NULL AUTO_INCREMENT,
+    `author_id`   int          NOT NULL,
+    `entry_id`    int          NOT NULL,
+    `published`   datetime     NOT NULL,
+    `edited`      datetime     NOT NULL,
+    `text`        varchar(256) NOT NULL,
+
+    PRIMARY KEY (`id`),
+    KEY (`author_id`),
+    FOREIGN KEY (`author_id`) REFERENCES `User` (`id`) ON DELETE CASCADE,
+    KEY (`entry_id`),
+    FOREIGN KEY (`entry_id`) REFERENCES `Blog_Entry` (`id`) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS `Entry_To_Permission`
 (
     `entry_id`      int NOT NULL,

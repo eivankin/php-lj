@@ -8,6 +8,8 @@ require_once 'db/permission/util.php';
 define('ADMIN', get_or_create_permission('admin',
     'Роль администратора, дающая доступ к панели администратора'));
 define('MODERATOR', get_or_create_permission('moderator',
-    'Роль модератора, позволяющая удалять публикации и управлять разрешением на их создание'));
+    'Роль модератора, позволяющая удалять публикации и комментарии, а также управлять разрешением на их создание'));
 define('CAN_PUBLISH', get_or_create_permission('can_publish',
     'Разрешение на публикацию материалов от своего лица'));
+define('CAN_COMMENT', get_or_create_permission('can_comment',
+    'Разрешение на публикацию комментариев от своего лица'));

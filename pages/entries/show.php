@@ -12,6 +12,8 @@ require_once 'db/permission/util.php';
 require_once 'db/blog_entry/views.php';
 require_once 'db/user/util.php';
 require_once 'db/category/util.php';
+require_once 'pages/entries/comments/util.php';
+require_once 'db/comment/util.php';
 
 if (!isset($id))
     $id = null;
@@ -51,7 +53,18 @@ if (count($permissions) > 0 &&
     <p>{$entry['content']}</p>
     <p><b>Категория:</b> {$category['name']}</p>
     <p><b>Теги:</b> {$tags}</p>
+    <h1>Комментарии к публикации</h1>
     ";
+
+    $comments = get_entry_comments($id);
+    if (count($comments) > 0) {
+        $content .= '<p>К данной публикации пока что нет комментариев.</p>';
+    } else {
+        foreach ($comments as $comment) {
+            $content .= make_comment_card($comment);
+        }
+    }
+    // TODO: form for adding comments
 }
 
 require_once 'pages/base.php';
