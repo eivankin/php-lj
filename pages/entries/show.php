@@ -60,10 +60,11 @@ if (count($permissions) > 0 &&
     if (count($comments) < 1) {
         $content .= '<p>К данной публикации пока что нет комментариев.</p>';
     } else {
+        $content .= '<hr>';
         foreach ($comments as $comment) {
             $content .= make_comment_card($comment,
                 has_any_permission($_SESSION['user_id'], [ADMIN, MODERATOR]),
-                $_SESSION['user_id'] == $comment['author_id']);
+                $_SESSION['user_id'] == $comment['author_id']) . '<hr>';
         }
     }
     $content .= "

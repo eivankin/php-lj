@@ -2,6 +2,8 @@
 require_once 'pages/util.php';
 require_once 'pages/entries/util.php';
 require_once 'db/permission/built-in.php';
+require_once 'db/blog_entry/util.php';
+require_once 'db/comment/util.php';
 
 if (!isset($id))
     $id = null;
