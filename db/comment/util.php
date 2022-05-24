@@ -59,7 +59,7 @@ function edit_comment(int $id, string $comment_text): bool
 {
     try {
         get_connection()->begin_transaction();
-        $query = get_connection()->prepare('UPDATE entry_comment SET text = ? WHERE id = ?');
+        $query = get_connection()->prepare('UPDATE entry_comment SET text = ?, edited = NOW() WHERE id = ?');
         $query->bind_param('si', $comment_text, $id);
         $result = $query->execute();
         get_connection()->commit();
