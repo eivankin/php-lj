@@ -32,7 +32,7 @@ $permissions = array_map(function ($p) {
 }, get_entry_permissions($id));
 
 if (count($permissions) > 0 &&
-    (!isset($_SESSION['user_id']) || ($_SESSION['user_id'] != $entry['author_id'] && !has_any_permission($_SESSION['user_id'], $permissions)))) {
+    (!isset($_SESSION['user_id']) || !can_view($_SESSION['user_id'], $permissions, $entry))) {
     $message = 'У вас нет прав для просмотра этой публикации';
 } else {
     if (isset($_SESSION['user_id']))
@@ -42,7 +42,7 @@ if (count($permissions) > 0 &&
     $views_count = get_views_count($id);
     $category = get_category($entry['category_id']);
     $tags = join(' | ', array_map(function ($t) {
-        return $t['name'];
+        return "<a href='/tags/{$t['id']}'>{$t['name']}</a>";
     }, get_entry_tags($entry['id'])));
 
     $content = "
@@ -53,18 +53,26 @@ if (count($permissions) > 0 &&
     <p>{$entry['content']}</p>
     <p><b>Категория:</b> {$category['name']}</p>
     <p><b>Теги:</b> {$tags}</p>
-    <h1>Комментарии к публикации</h1>
+    <h3>Комментарии к публикации</h3>
     ";
 
     $comments = get_entry_comments($id);
-    if (count($comments) > 0) {
+    if (count($comments) < 1) {
         $content .= '<p>К данной публикации пока что нет комментариев.</p>';
     } else {
         foreach ($comments as $comment) {
             $content .= make_comment_card($comment);
         }
     }
-    // TODO: form for adding comments
+    $content .= "
+        <form style='width: 300px' method='post' action='./{$id}/comments/new'>
+            <div>
+                <label for='comment_text'>Текст комментария</label>
+                <input type='text' id='comment_text' name='comment_text' required>
+            </div>
+            <button type='submit'>Добавить комментарий</button>
+        </form>
+    ";
 }
 
 require_once 'pages/base.php';

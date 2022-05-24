@@ -16,12 +16,14 @@ require_once 'db/category/util.php';
 require_once 'db/tag/util.php';
 require_once 'db/blog_entry/util.php';
 require_once 'db/blog_entry/views.php';
+require_once 'db/comment/util.php';
 
 // Создание аккаунта администратора и выдача ему прав
 echo create_user('example@mail.ru', 'admin', 'admin') . PHP_EOL;
 add_permission_to_user(1, ADMIN);
 add_permission_to_user(1, MODERATOR);
 add_permission_to_user(1, CAN_PUBLISH);
+add_permission_to_user(1, CAN_COMMENT);
 
 $subscription_on_admin = get_subscription_id(1);
 
@@ -29,6 +31,7 @@ $subscription_on_admin = get_subscription_id(1);
 // выдача ему права на публикацию материалов и подписки на администратора
 echo create_user('user@localhost', 'user', 'user');
 add_permission_to_user(2, CAN_PUBLISH);
+add_permission_to_user(2, CAN_COMMENT);
 add_permission_to_user(2, $subscription_on_admin);
 
 // Создание категорий
@@ -42,10 +45,11 @@ create_tag('Второй тестовый тег');
 // Создание публикаций
 publish(1, 'Тестовая публикация для подписчиков', 'Привет, подписчики!', 1, [1, 2], [$subscription_on_admin]);
 sleep(1); // Пауза между созданием материалов для разного времени публикации
-publish(2, 'Тестовая публикация для всех', 'Привет, мир!', 2, [1], [2]);
+publish(2, 'Тестовая публикация для всех', 'Привет, мир!', 2, [1], []);
 
 // Создание просмотров публикации
 create_view(1, 1);
 create_view(1, 2);
 
-// TODO: создание комментариев
+// Создание комментариев
+create_comment(1, 2, 'Хорошая публикация');

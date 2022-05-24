@@ -213,12 +213,11 @@ function delete_entry(int $id): bool
  * Эта функция возвращает список самых популярных публикаций по их просмотрам.
  * Принимает на вход требуемое количество возвращённых публикаций (по умолчанию - 5).
  */
-// TODO: order by comments count if number of views is equal
 function get_most_popular(int $limit = 5): array
 {
-    $query = get_connection()->prepare('SELECT blog_entry.*, COUNT(entry_id) AS views_count from blog_entry 
-        INNER JOIN entry_view ev on blog_entry.id = ev.entry_id 
-                                                    GROUP BY entry_id ORDER BY views_count DESC LIMIT ?');
+    $query = get_connection()->prepare('SELECT blog_entry.*, COUNT(ev.entry_id) AS views_count, 
+       COUNT(ec.entry_id) AS comments_count from blog_entry INNER JOIN entry_view ev on blog_entry.id = ev.entry_id 
+           LEFT JOIN entry_comment ec on blog_entry.id = ec.entry_id GROUP BY ev.entry_id ORDER BY views_count DESC, comments_count DESC LIMIT ?');
     $query->bind_param('i', $limit);
     $query->execute();
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);

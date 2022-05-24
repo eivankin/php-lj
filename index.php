@@ -18,7 +18,7 @@ define('URL', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 function handle_url_with_id(array $urls, array $matches, int $id_group = 1, int $action_position = 3)
 {
     $id = $matches[$id_group];
-    $action = explode('/', URL)[$action_position];
+    $action = join('/', array_slice(explode('/', URL), $action_position));
 
     // Если действие пустое, то оно считается действием просмотра,
     // происходит обращение к первому элементу словаря.
@@ -27,7 +27,7 @@ function handle_url_with_id(array $urls, array $matches, int $id_group = 1, int 
         exit();
     }
 
-    // Если
+    // Иначе обратиться к нужному обработчику
     if (isset($urls[$action])) {
         require_once $urls[$action];
         exit();
@@ -78,7 +78,10 @@ if (preg_match('/\/users\/(\d+).*/', URL, $matches)) {
 if (preg_match('/\/entries\/(\d+).*/', URL, $matches)) {
     handle_url_with_id(array('pages/entries/show.php',
         'delete' => 'pages/entries/delete.php',
-        'edit' => 'pages/entries/edit.php'), $matches);
+        'edit' => 'pages/entries/edit.php',
+        'comments/new' => 'pages/entries/comments/new.php',
+        'comments/edit' => 'pages/entries/comments/edit.php',
+        'comments/delete' => 'pages/entries/comments/delete.php'), $matches);
 }
 
 // Обработка запроса к операции над конкретной категорией

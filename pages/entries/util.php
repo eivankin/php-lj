@@ -18,6 +18,10 @@ function make_entry_card(array $entry): string
     if (isset($entry['views_count']))
         $views = "<p>Просмотры: {$entry['views_count']}</p>";
 
+    $comments = '';
+    if (isset($entry['comments_count']))
+        $comments = "<p>Комментарии: {$entry['comments_count']}</p>";
+
     return "
     <div class='entry-card'>
         <div class='card-header'>{$entry['title']}</div>
@@ -27,10 +31,14 @@ function make_entry_card(array $entry): string
             <p>Категория: <a href='/entries/?category={$category['id']}'>{$category['name']}</a></p>
             <p>Теги: {$tags}</p>
             {$views}
+            {$comments}
             <p><a href='/entries/{$entry['id']}'><button>Читать</button></a></p>
         </div>
     </div>
     ";
 }
 
-
+function can_view(int $user_id, array $permissions, array $entry): bool
+{
+    return $user_id == $entry['author_id']|| has_any_permission($user_id, $permissions);
+}
