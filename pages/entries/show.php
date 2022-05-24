@@ -77,6 +77,8 @@ if (count($permissions) > 0 &&
             <button type='submit'>Добавить</button>
         </form>
     ";
+
+    // TODO: image gallery
 }
 
 require_once 'pages/base.php';

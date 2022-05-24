@@ -64,6 +64,8 @@ if (has_user_permission($_SESSION['user_id'], CAN_PUBLISH)) {
     </div>
     <button type='submit'>Опубликовать</button>
 </form>";
+
+        // TODO: adding images
     }
 } else {
     $message = 'У вас нет прав для создания публикации';

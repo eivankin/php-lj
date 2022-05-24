@@ -104,6 +104,8 @@ if ($_SESSION['user_id'] == $entry['author_id'] || has_user_permission($_SESSION
         }
 
         $content .= "<button type='submit'>Опубликовать</button></form>";
+
+        // TODO: edit attachments
     }
 } else {
     $message = 'У вас нет прав для редактирования этой публикации';

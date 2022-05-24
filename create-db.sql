@@ -57,12 +57,12 @@ CREATE TABLE IF NOT EXISTS `Blog_Entry`
 
 CREATE TABLE IF NOT EXISTS `Entry_Comment`
 (
-    `id`          int          NOT NULL AUTO_INCREMENT,
-    `author_id`   int          NOT NULL,
-    `entry_id`    int          NOT NULL,
-    `published`   datetime     NOT NULL,
-    `edited`      datetime     NOT NULL,
-    `text`        varchar(256) NOT NULL,
+    `id`        int          NOT NULL AUTO_INCREMENT,
+    `author_id` int          NOT NULL,
+    `entry_id`  int          NOT NULL,
+    `published` datetime     NOT NULL,
+    `edited`    datetime     NOT NULL,
+    `text`      varchar(256) NOT NULL,
 
     PRIMARY KEY (`id`),
     KEY (`author_id`),
@@ -118,4 +118,15 @@ CREATE TABLE IF NOT EXISTS `User_To_Permission`
     FOREIGN KEY (`user_id`) REFERENCES `User` (`id`) ON DELETE CASCADE,
     KEY (`permission_id`),
     FOREIGN KEY (`permission_id`) REFERENCES `Permission` (`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `Entry_Image_Attachment`
+(
+    `id`       int           NOT NULL AUTO_INCREMENT,
+    `entry_id` int           NOT NULL,
+    `url`      VARCHAR(1024) NOT NULL,
+
+    PRIMARY KEY (`id`),
+    KEY (`entry_id`),
+    FOREIGN KEY (`entry_id`) REFERENCES `Blog_Entry` (`id`) ON DELETE CASCADE
 );
