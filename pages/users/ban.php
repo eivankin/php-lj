@@ -21,7 +21,8 @@ if (!isset($user))
 
 if (has_user_permission($_SESSION['user_id'], MODERATOR)) {
     remove_permission_from_user($id, CAN_PUBLISH);
-    $message = 'Выбранный пользователь успешно лишён прав на публикацию материалов';
+    remove_permission_from_user($id, CAN_COMMENT);
+    $message = 'Выбранный пользователь успешно лишён прав на публикацию материалов и комментариев';
 } else {
     $message = 'У вас нет прав для управления разрешениями пользователей';
     http_response_code(403);

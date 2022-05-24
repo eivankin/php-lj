@@ -20,7 +20,8 @@ if (!isset($user))
 
 if (has_user_permission($_SESSION['user_id'], MODERATOR)) {
     add_permission_to_user($id, CAN_PUBLISH);
-    $message = 'Выбранный пользователь теперь может публиковать материалы';
+    add_permission_to_user($id, CAN_COMMENT);
+    $message = 'Выбранный пользователь теперь может публиковать материалы и комментарии';
 } else {
     $message = 'У вас нет прав для управления разрешениями пользователей';
     http_response_code(403);

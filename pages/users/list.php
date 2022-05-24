@@ -23,8 +23,8 @@ foreach (get_all_users() as $user) {
     $actions = '<a href="./' . $user['id'] . '/subscribe">Подписаться</a>' .
         ' | <a href="./' . $user['id'] . '/unsubscribe">Отписаться</a>';
     if ($is_moderator)
-        $actions .= ' | <a href="./' . $user['id'] . '/ban">Запретить создавать публикации</a>' .
-            ' | <a href="./' . $user['id'] . '/unban">Разрешить создавать публикации</a>';
+        $actions .= ' | <a href="./' . $user['id'] . '/ban">Запретить создавать публикации и комментарии</a>' .
+            ' | <a href="./' . $user['id'] . '/unban">Разрешить создавать публикации и комментарии</a>';
     if ($is_admin) {
         $actions .= ' | <a href="./' . $user['id'] . '/permissions">Управлять правами</a>' .
             ' | <a href="./' . $user['id'] . '/edit">Редактировать</a>' .
