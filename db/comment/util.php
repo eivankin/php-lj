@@ -1,13 +1,15 @@
 <?php
+require_once 'db/connection.php';
+
 function create_comment(int $user_id, int $entry_id, string $comment_text): bool
 {
     try {
-    get_connection()->begin_transaction();
-    $query = get_connection()->prepare(
-        'INSERT INTO entry_comment(author_id, entry_id, text, edited, published) VALUES (?, ?, ?, NOW(), NOW())');
-    $query->bind_param('iis', $user_id, $entry_id, $comment_text);
-    $result = $query->execute();
-    get_connection()->commit();
+        get_connection()->begin_transaction();
+        $query = get_connection()->prepare(
+            'INSERT INTO entry_comment(author_id, entry_id, text, edited, published) VALUES (?, ?, ?, NOW(), NOW())');
+        $query->bind_param('iis', $user_id, $entry_id, $comment_text);
+        $result = $query->execute();
+        get_connection()->commit();
         return $result;
     } catch (mysqli_sql_exception $exception) {
         return false;
@@ -53,11 +55,16 @@ function get_entry_comment_count(int $entry_id): int
     return $query->get_result()->fetch_assoc()['comment_count'];
 }
 
-function edit_comment(int $id, string $comment_text)
+function edit_comment(int $id, string $comment_text): bool
 {
-    get_connection()->begin_transaction();
-    $query = get_connection()->prepare('UPDATE entry_comment SET text = ? WHERE id = ?');
-    $query->bind_param('si', $comment_text, $id);
-    $query->execute();
-    get_connection()->commit();
+    try {
+        get_connection()->begin_transaction();
+        $query = get_connection()->prepare('UPDATE entry_comment SET text = ? WHERE id = ?');
+        $query->bind_param('si', $comment_text, $id);
+        $result = $query->execute();
+        get_connection()->commit();
+        return $result;
+    } catch (mysqli_sql_exception $exception) {
+        return false;
+    }
 }

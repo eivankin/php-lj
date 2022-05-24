@@ -17,6 +17,7 @@ function make_comment_card(array $comment, bool $can_delete, bool $is_author): s
         $body = "
         <form style='display: inline-block' method='post' action='/entries/{$comment['entry_id']}/comments/edit'>
             <input type='text' name='comment_text' value='{$comment['text']}'>
+            <input type='hidden' name='comment_id' value='{$comment['id']}'>
             <button type='submit'>Редактировать</button>
         </form>";
     } else {

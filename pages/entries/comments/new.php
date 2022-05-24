@@ -8,7 +8,7 @@ require_once 'db/comment/util.php';
 if (!isset($id))
     $id = null;
 
-handle_page_with_id($id, 'entries', '/comments/new');
+handle_page_with_id($id, 'entries', '');
 
 $title = 'Создание комментария';
 
