@@ -22,13 +22,13 @@ function handle_url_with_id(array $urls, array $matches, int $id_group = 1, int 
 
     // Если действие пустое, то оно считается действием просмотра,
     // происходит обращение к первому элементу словаря.
-    if (!isset($action)) {
+    if (empty($action)) {
         require_once $urls[0];
         exit();
     }
 
     // Иначе обратиться к нужному обработчику
-    if (isset($urls[$action])) {
+    if (!empty($urls[$action])) {
         require_once $urls[$action];
         exit();
     }
