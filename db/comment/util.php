@@ -39,7 +39,7 @@ function get_comment(int $id)
 
 function get_entry_comments(int $entry_id): array
 {
-    $query = get_connection()->prepare('SELECT * FROM entry_comment WHERE entry_id = ?');
+    $query = get_connection()->prepare('SELECT * FROM entry_comment WHERE entry_id = ? ORDER BY published');
     $query->bind_param('i', $entry_id);
     $query->execute();
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);

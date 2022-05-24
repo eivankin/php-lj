@@ -61,16 +61,19 @@ if (count($permissions) > 0 &&
         $content .= '<p>К данной публикации пока что нет комментариев.</p>';
     } else {
         foreach ($comments as $comment) {
-            $content .= make_comment_card($comment);
+            $content .= make_comment_card($comment,
+                has_any_permission($_SESSION['user_id'], [ADMIN, MODERATOR]),
+                $_SESSION['user_id'] == $comment['author_id']);
         }
     }
     $content .= "
+        <h4>Добавить комментарий</h4>
         <form style='width: 300px' method='post' action='./{$id}/comments/new'>
             <div>
                 <label for='comment_text'>Текст комментария</label>
                 <input type='text' id='comment_text' name='comment_text' required>
             </div>
-            <button type='submit'>Добавить комментарий</button>
+            <button type='submit'>Добавить</button>
         </form>
     ";
 }
