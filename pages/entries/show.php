@@ -14,6 +14,7 @@ require_once 'db/user/util.php';
 require_once 'db/category/util.php';
 require_once 'pages/entries/comments/util.php';
 require_once 'db/comment/util.php';
+require_once 'pages/entries/util.php';
 
 if (!isset($id))
     $id = null;
@@ -51,6 +52,20 @@ if (count($permissions) > 0 &&
     <a href='/users/{$entry['author_id']}/subscribe'><button>Подписаться</button></a></p>
     <p><b>Просмотры:</b> {$views_count}</p>
     <p>{$entry['content']}</p>
+    ";
+
+    $attachments = get_entry_attachments($id);
+    if (count($attachments) > 0) {
+        $content .= '<h2>Прикреплённые изображения</h2><p class="img-gallery">';
+
+        foreach ($attachments as $attachment) {
+            $content .= make_image($attachment);
+        }
+
+        $content .= '</p>';
+    }
+
+    $content .= "
     <p><b>Категория:</b> {$category['name']}</p>
     <p><b>Теги:</b> {$tags}</p>
     <h3>Комментарии к публикации</h3>
@@ -63,8 +78,8 @@ if (count($permissions) > 0 &&
         $content .= '<hr>';
         foreach ($comments as $comment) {
             $content .= make_comment_card($comment,
-                has_any_permission($_SESSION['user_id'], [ADMIN, MODERATOR]),
-                $_SESSION['user_id'] == $comment['author_id']) . '<hr>';
+                    has_any_permission($_SESSION['user_id'], [ADMIN, MODERATOR]),
+                    $_SESSION['user_id'] == $comment['author_id']) . '<hr>';
         }
     }
     $content .= "
@@ -78,7 +93,6 @@ if (count($permissions) > 0 &&
         </form>
     ";
 
-    // TODO: image gallery
 }
 
 require_once 'pages/base.php';

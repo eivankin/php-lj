@@ -38,9 +38,9 @@ function publish(int   $user_id, string $title, string $content, int $category_i
 
     try {
         for ($index = 0; $index < count($attachments['name']); ++$index) {
-            $upload_path = UPLOAD_DIR . basename($attachments['name'][$index]);
+            $upload_path = BASE_DIR . UPLOAD_DIR . basename($attachments['name'][$index]);
             if (move_uploaded_file($attachments['tmp_name'][$index], $upload_path))
-                create_attachment($entry_id, $upload_path);
+                create_attachment($entry_id, '/' . str_replace('\\', '/', UPLOAD_DIR . basename($attachments['name'][$index])));
             else
                 return "Не удалось загрузить файл {$attachments['name'][$index]}. Возможно, превышен максимальный размер файла.";
         }
@@ -228,8 +228,8 @@ function delete_entry(int $id): bool
  */
 function get_most_popular(int $limit = 5): array
 {
-    $query = get_connection()->prepare('SELECT blog_entry.*, COUNT(ev.entry_id) AS views_count, 
-       COUNT(ec.entry_id) AS comments_count from blog_entry INNER JOIN entry_view ev on blog_entry.id = ev.entry_id 
+    $query = get_connection()->prepare('SELECT blog_entry.*, COUNT(DISTINCT ev.user_id) AS views_count, 
+       COUNT(DISTINCT ec.id) AS comments_count from blog_entry INNER JOIN entry_view ev on blog_entry.id = ev.entry_id 
            LEFT JOIN entry_comment ec on blog_entry.id = ec.entry_id GROUP BY ev.entry_id ORDER BY views_count DESC, comments_count DESC LIMIT ?');
     $query->bind_param('i', $limit);
     $query->execute();

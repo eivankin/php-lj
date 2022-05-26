@@ -1,7 +1,8 @@
 <?php
 require_once 'db/connection.php';
 
-const UPLOAD_DIR = 'C:\\OpenServer\\domains\\localhost\\attachments\\';
+const BASE_DIR = 'C:\\OpenServer\\domains\\localhost\\';
+const UPLOAD_DIR = 'attachments\\';
 
 function create_attachment(int $entry_id, string $upload_path): bool
 {

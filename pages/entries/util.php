@@ -40,5 +40,16 @@ function make_entry_card(array $entry): string
 
 function can_view(int $user_id, array $permissions, array $entry): bool
 {
-    return $user_id == $entry['author_id']|| has_any_permission($user_id, $permissions);
+    return $user_id == $entry['author_id'] || has_any_permission($user_id, $permissions);
+}
+
+function make_image(array $attachment): string
+{
+    return "
+    <input class='img-controller' type='checkbox' id='img-controller-{$attachment['id']}'>
+    <label class='img-container' for='img-controller-{$attachment['id']}'>
+        <img class='img-element' src='{$attachment['url']}' alt=''>
+        <span class='close-btn'>&times;</span>
+    </label>
+    ";
 }
