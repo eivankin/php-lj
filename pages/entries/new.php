@@ -17,11 +17,11 @@ if (has_user_permission($_SESSION['user_id'], CAN_PUBLISH)) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) &&
         isset($_POST['content']) && isset($_POST['category'])) {
         $message = publish($_SESSION['user_id'], $_POST['title'], $_POST['content'], $_POST['category'],
-            $_POST['tag'] ?? [], $_POST['permission']?? []);
+            $_POST['tag'] ?? [], $_POST['permission'] ?? [], $_FILES['attachments'] ?? []);
     } else {
 
         $content = '
-<form class="fixed-width" style="width: 450px" method="post">
+<form class="fixed-width" style="width: 450px" method="post" enctype="multipart/form-data">
     <div>
         <label for="title">Заголовок</label>
         <input type="text" id="title" name="title" required>
@@ -61,6 +61,13 @@ if (has_user_permission($_SESSION['user_id'], CAN_PUBLISH)) {
             <option value='" . MODERATOR . "'>Модераторы</option>
             <option value='" . CAN_PUBLISH . "'>Авторы других публикаций</option>
         </select>
+    </div>
+    <div>
+        <input type='hidden' name='MAX_FILE_SIZE' value='31457000' />
+        <label for='attachments'>Прикреплённые изображения</label>
+        <input type='file' multiple 
+            placeholder='Выберите файл в формате JPEG, PNG или GIF (не более 30 МБ)' 
+            id='attachments' name='attachments[]' accept='image/jpeg,image/png,image/gif'>
     </div>
     <button type='submit'>Опубликовать</button>
 </form>";

@@ -3,6 +3,7 @@ require_once 'db/connection.php';
 require_once 'db/tag/util.php';
 require_once 'db/permission/built-in.php';
 require_once 'db/util.php';
+require_once 'db/blog_entry/attachments.php';
 
 /**
  * Эта функция выполняет все необходимые действия для публикации материала:
@@ -13,7 +14,7 @@ require_once 'db/util.php';
  * Возвращает сообщение с информацией об успешности публикации материала.
  */
 function publish(int   $user_id, string $title, string $content, int $category_id,
-                 array $tags, array $permissions): string
+                 array $tags, array $permissions, array $attachments): string
 {
     $entry_id = create_entry($user_id, $title, $content, $category_id);
     if ($entry_id === -1)
@@ -33,6 +34,18 @@ function publish(int   $user_id, string $title, string $content, int $category_i
         }
     } catch (mysqli_sql_exception $exception) {
         return 'Не удалось связать публикацию с разрешениями для просмотра. Перейдите к редактированию и попробуйте ещё раз.';
+    }
+
+    try {
+        for ($index = 0; $index < count($attachments['name']); ++$index) {
+            $upload_path = UPLOAD_DIR . basename($attachments['name'][$index]);
+            if (move_uploaded_file($attachments['tmp_name'][$index], $upload_path))
+                create_attachment($entry_id, $upload_path);
+            else
+                return "Не удалось загрузить файл {$attachments['name'][$index]}. Возможно, превышен максимальный размер файла.";
+        }
+    } catch (mysqli_sql_exception $exception) {
+        return 'Не удалось сохранить прикреплённые изображения. Перейдите к редактированию и попробуйте ещё раз.';
     }
 
     return 'Успешно опубликовано.';
