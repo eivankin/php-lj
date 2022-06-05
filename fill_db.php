@@ -17,6 +17,7 @@ require_once 'db/tag/util.php';
 require_once 'db/blog_entry/util.php';
 require_once 'db/blog_entry/views.php';
 require_once 'db/comment/util.php';
+require_once 'db/blog_entry/attachments.php';
 
 // Создание аккаунта администратора и выдача ему прав
 echo create_user('example@mail.ru', 'admin', 'admin') . PHP_EOL;
@@ -43,9 +44,9 @@ create_tag('Тестовый тег');
 create_tag('Второй тестовый тег');
 
 // Создание публикаций
-publish(1, 'Тестовая публикация для подписчиков', 'Привет, подписчики!', 1, [1, 2], [$subscription_on_admin]);
+echo publish(1, 'Тестовая публикация для подписчиков', 'Привет, подписчики!', 1, [1, 2], [$subscription_on_admin], []);
 sleep(1); // Пауза между созданием материалов для разного времени публикации
-publish(2, 'Тестовая публикация для всех', 'Привет, мир!', 2, [1], []);
+echo publish(2, 'Тестовая публикация для всех', 'Привет, мир!', 2, [1], [], []);
 
 // Создание просмотров публикации
 create_view(1, 1);

@@ -203,3 +203,9 @@ input.img-controller[type=checkbox] {
     max-height: 400px;
     max-width: 50vw;
 }
+
+.img-gallery {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}

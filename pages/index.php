@@ -7,7 +7,7 @@ require_once 'pages/entries/util.php';
  */
 
 $title = 'Главная страница';
-$content = '<h1>Добро пожаловать</h1>';
+$content = '';
 
 if (isset($_SESSION['user_id'])) {
     $content .= '<h2>Ваши подписки</h2>';
