@@ -27,11 +27,12 @@ if ($_SESSION['user_id'] == $entry['author_id'] || has_user_permission($_SESSION
         isset($_POST['content']) && isset($_POST['category'])) {
         $message = edit($entry['id'], $_POST['title'], $_POST['content'], $_POST['category'],
             $_POST['tag'] ?? [], $_POST['permission'] ?? [],
-            $_POST['old_tags'] ?? [], $_POST['old_permissions'] ?? []);
+            $_POST['old_tags'] ?? [], $_POST['old_permissions'] ?? [],
+            $_POST['attachments_to_delete'] ?? [], $_FILES['new_attachments'] ?? []);
     } else {
 
         $content = '
-<form class="fixed-width" style="width: 450px" method="post">
+<form class="fixed-width" style="width: 450px" method="post" enctype="multipart/form-data">
     <div>
         <label for="title">Заголовок</label>
         <input type="text" id="title" value="' . $entry['title'] . '" name="title" required>
@@ -103,9 +104,35 @@ if ($_SESSION['user_id'] == $entry['author_id'] || has_user_permission($_SESSION
             $content .= "<input type='hidden' name='old_permissions[]' value='$id'>";
         }
 
-        $content .= "<button type='submit'>Опубликовать</button></form>";
+        $attachments = get_entry_attachments($entry['id']);
+        if (!empty($attachments)) {
 
-        // TODO: edit attachments
+            $content .= "
+            <div>
+                <label for='attachments_to_delete'>Выберите вложения для удаления</label>
+                <select id='attachments_to_delete' name='attachments_to_delete[]' multiple>
+                    ";
+
+            foreach ($attachments as $attachment) {
+                $content .= "<option value='{$attachment['id']}'>{$attachment['url']}</option>";
+            }
+
+                $content .= "
+                </select>
+            </div>
+        ";
+        }
+
+        $content .= "
+        <div>
+            <input type='hidden' name='MAX_FILE_SIZE' value='31457000' />
+            <label for='attachments'>Прикрепить изображения</label>
+            <input type='file' multiple 
+                placeholder='Выберите файл в формате JPEG, PNG или GIF (не более 30 МБ)' 
+                id='attachments' name='new_attachments[]' accept='image/jpeg,image/png,image/gif'>
+        </div>";
+
+        $content .= "<button type='submit'>Опубликовать</button></form>";
     }
 } else {
     $message = 'У вас нет прав для редактирования этой публикации';

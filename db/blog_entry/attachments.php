@@ -27,9 +27,18 @@ function get_entry_attachments(int $entry_id): array
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
+function get_attachment(int $id)
+{
+    $query = get_connection()->prepare('SELECT * FROM entry_image_attachment WHERE id = ?');
+    $query->bind_param('i', $id);
+    $query->execute();
+    return $query->get_result()->fetch_assoc();
+}
+
 function delete_attachment(int $id): bool
 {
     try {
+        delete_attachment_file(get_attachment($id)['url']);
         get_connection()->begin_transaction();
         $query = get_connection()->prepare(
             'DELETE FROM entry_image_attachment WHERE id = ?');
@@ -40,4 +49,8 @@ function delete_attachment(int $id): bool
     } catch (mysqli_sql_exception $exception) {
         return false;
     }
+}
+
+function delete_attachment_file(string $url) {
+    unlink(BASE_DIR . str_replace('/', '\\', mb_substr($url, 1)));
 }

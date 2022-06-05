@@ -36,17 +36,10 @@ function publish(int   $user_id, string $title, string $content, int $category_i
         return 'Не удалось связать публикацию с разрешениями для просмотра. Перейдите к редактированию и попробуйте ещё раз.';
     }
 
-    try {
-        for ($index = 0; $index < count($attachments['name']); ++$index) {
-            $upload_path = BASE_DIR . UPLOAD_DIR . basename($attachments['name'][$index]);
-            if (move_uploaded_file($attachments['tmp_name'][$index], $upload_path))
-                create_attachment($entry_id, '/' . str_replace('\\', '/', UPLOAD_DIR . basename($attachments['name'][$index])));
-            else
-                return "Не удалось загрузить файл {$attachments['name'][$index]}. Возможно, превышен максимальный размер файла.";
-        }
-    } catch (mysqli_sql_exception $exception) {
-        return 'Не удалось сохранить прикреплённые изображения. Перейдите к редактированию и попробуйте ещё раз.';
-    }
+    $result = create_attachments($attachments, $entry_id);
+
+    if (!empty($result))
+        return $result;
 
     return 'Успешно опубликовано.';
 }
@@ -156,7 +149,8 @@ function get_entry(int $id)
 function edit(int    $entry_id, string $title,
               string $content, int $category_id,
               array  $tags, array $permissions,
-              array  $old_tags, array $old_permissions): string
+              array  $old_tags, array $old_permissions,
+              array  $attachments_to_remove, array $new_attachments): string
 {
     if (!update_entry($entry_id, $title, $content, $category_id))
         return 'Не удалось обновить публикацию';
@@ -181,6 +175,18 @@ function edit(int    $entry_id, string $title,
     } catch (mysqli_sql_exception $exception) {
         return 'Не удалось обновить разрешения для просмотра публикации';
     }
+
+    foreach ($attachments_to_remove as $attachment_to_remove) {
+        $is_successful = delete_attachment($attachment_to_remove);
+
+        if (!$is_successful)
+            return 'Не удалось удалить выбранные вложения.';
+    }
+
+    $result = create_attachments($new_attachments, $entry_id);
+
+    if (!empty($result))
+        return $result;
 
     return 'Публикация успешно обновлена';
 }
@@ -211,6 +217,10 @@ function update_entry(int $entry_id, string $title, string $content, int $catego
 function delete_entry(int $id): bool
 {
     try {
+        foreach (get_entry_attachments($id) as $attachment) {
+            delete_attachment_file($attachment['url']);
+        }
+
         get_connection()->begin_transaction();
         $query = get_connection()->prepare('DELETE FROM blog_entry WHERE id = ?');
         $query->bind_param('i', $id);
@@ -258,4 +268,21 @@ function get_subscription_entries(int $user_id, int $limit = null, string $order
     $query->bind_param($bind_list, ...$subscribed_on);
     $query->execute();
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+function create_attachments(array $attachments, int $entry_id): string
+{
+    try {
+        for ($index = 0; $index < count($attachments['name']); ++$index) {
+            $upload_path = BASE_DIR . UPLOAD_DIR . basename($attachments['name'][$index]);
+            if (move_uploaded_file($attachments['tmp_name'][$index], $upload_path))
+                create_attachment($entry_id, '/' . str_replace('\\', '/', UPLOAD_DIR . basename($attachments['name'][$index])));
+            else
+                return "Не удалось загрузить файл {$attachments['name'][$index]}. Возможно, превышен максимальный размер файла.";
+        }
+    } catch (mysqli_sql_exception $exception) {
+        return 'Не удалось сохранить прикреплённые изображения. Перейдите к редактированию и попробуйте ещё раз.';
+    }
+
+    return '';
 }

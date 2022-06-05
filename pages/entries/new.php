@@ -64,15 +64,13 @@ if (has_user_permission($_SESSION['user_id'], CAN_PUBLISH)) {
     </div>
     <div>
         <input type='hidden' name='MAX_FILE_SIZE' value='31457000' />
-        <label for='attachments'>Прикреплённые изображения</label>
+        <label for='attachments'>Прикрепить изображения</label>
         <input type='file' multiple 
             placeholder='Выберите файл в формате JPEG, PNG или GIF (не более 30 МБ)' 
             id='attachments' name='attachments[]' accept='image/jpeg,image/png,image/gif'>
     </div>
     <button type='submit'>Опубликовать</button>
 </form>";
-
-        // TODO: adding images
     }
 } else {
     $message = 'У вас нет прав для создания публикации';
