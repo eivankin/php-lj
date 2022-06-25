@@ -42,9 +42,7 @@ if (count($permissions) > 0 &&
     $author = get_user($entry['author_id']);
     $views_count = get_views_count($id);
     $category = get_category($entry['category_id']);
-    $tags = join(' | ', array_map(function ($t) {
-        return "<a href='/tags/{$t['id']}'>{$t['name']}</a>";
-    }, get_entry_tags($entry['id'])));
+    $tags = get_entry_tags_as_str($entry);
 
     $content = "
     <h1>{$entry['title']}</h1>
@@ -65,14 +63,15 @@ if (count($permissions) > 0 &&
         $content .= '</p>';
     }
 
-    $content .= "
+    $content .= "<hr>
     <p><b>Категория:</b> {$category['name']}</p>
-    <p><b>Теги:</b> {$tags}</p>
-    <h3>Комментарии к публикации</h3>
+    <p><b>Теги:</b> {$tags}</p><hr>
     ";
 
     $comments = get_entry_comments($id);
-    if (count($comments) < 1) {
+    $comment_count = count($comments);
+    $content .= "<h1>Комментарии к публикации: {$comment_count}</h1>";
+    if ($comment_count < 1) {
         $content .= '<p>К данной публикации пока что нет комментариев.</p>';
     } else {
         $content .= '<hr>';

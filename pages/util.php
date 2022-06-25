@@ -32,3 +32,10 @@ function handle_page_with_id($id, string $dir, string $action, bool $login_requi
     if ($login_required)
         login_required('/' . $dir . '/' . $id . $action);
 }
+
+/**
+ * Эта функция возвращает переданную строку или "Нет", если переданная строка пуста.
+ */
+function get_str_or_no(string $input): string {
+    return empty($input) ? "Нет" : $input;
+}

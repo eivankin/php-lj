@@ -77,8 +77,10 @@ function remove_permission_from_user(int $user_id, int $permission_id)
  * Эта функция проверяет наличие хотя бы одного разрешения из списка у пользователя.
  * Принимает на вход ID пользователя и список ID разрешений.
  */
-function has_any_permission(int $user_id, array $permission_ids): bool
+function has_any_permission($user_id, array $permission_ids): bool
 {
+    if (empty($user_id))
+        return false;
     $values = str_repeat('?,', count($permission_ids) - 1) . '?';
     $query = get_connection()->prepare("SELECT * FROM user_to_permission WHERE user_id = ? AND permission_id IN ({$values})");
     $query->bind_param('i' . str_repeat('i', count($permission_ids)), $user_id, ...$permission_ids);

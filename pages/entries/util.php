@@ -2,7 +2,16 @@
 require_once 'db/user/util.php';
 require_once 'db/category/util.php';
 require_once 'db/tag/util.php';
+require_once 'pages/util.php';
 
+/**
+ * Эта функция возвращает список тегов данной публикации в виде строки, содержащей HTML-ссылки на них.
+ */
+function get_entry_tags_as_str(array $entry): string {
+    return get_str_or_no(join(' | ', array_map(function ($t) {
+        return "<a href='/entries/?tags[]={$t['id']}'>{$t['name']}</a>";
+    }, get_entry_tags($entry['id']))));
+}
 
 /**
  * Эта функция генерирует HTML-карточку публикации на основе словаря с атрибутами публикации.
@@ -11,9 +20,7 @@ function make_entry_card(array $entry): string
 {
     $author = get_user($entry['author_id']);
     $category = get_category($entry['category_id']);
-    $tags = join(' | ', array_map(function ($t) {
-        return "<a href='/entries/?tags[]={$t['id']}'>{$t['name']}</a>";
-    }, get_entry_tags($entry['id'])));
+    $tags = get_entry_tags_as_str($entry);
     $views = '';
     if (isset($entry['views_count']))
         $views = "<p>Просмотры: {$entry['views_count']}</p>";

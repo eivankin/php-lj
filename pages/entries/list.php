@@ -11,6 +11,7 @@ require_once 'db/blog_entry/util.php';
 require_once 'db/user/util.php';
 require_once 'db/category/util.php';
 require_once 'db/blog_entry/views.php';
+require_once 'pages/entries/util.php';
 
 $is_admin = isset($_SESSION['user_id']) && has_user_permission($_SESSION['user_id'], ADMIN);
 $is_moderator = isset($_SESSION['user_id']) && has_user_permission($_SESSION['user_id'], MODERATOR);
@@ -151,9 +152,7 @@ foreach (get_entries($_GET['title'], $_GET['content'],
         $actions .= "<a href='./{$entry['id']}/delete'>Удалить</a>";
     }
 
-    $tags = join(' | ', array_map(function ($t) {
-        return $t['name'];
-    }, get_entry_tags($entry['id'])));
+    $tags = get_entry_tags_as_str($entry);
 
     $views_count = get_views_count($entry['id']);
 
