@@ -13,7 +13,10 @@ if (isset($_SESSION['user_id'])) {
     $content .= '<h2>Ваши подписки</h2>';
     $content .= '<div class="card-group">';
 
-    foreach (get_subscription_entries($_SESSION['user_id'], 5) as $entry)
+    $subscription_entries = get_subscription_entries($_SESSION['user_id'], 5);
+    if (count($subscription_entries) < 1)
+        $content .= '<p>Новых публикаций нет.</p>';
+    foreach ($subscription_entries as $entry)
         $content .= make_entry_card($entry);
 
     $content .= '</div>';
@@ -21,7 +24,10 @@ if (isset($_SESSION['user_id'])) {
 
 $content .= '<h2>Популярные публикации</h2>';
 $content .= '<div class="card-group">';
-foreach (get_most_popular() as $entry)
+$popular = get_most_popular();
+if (count($popular) < 1)
+    $content .= '<p>Новых публикаций нет.</p>';
+foreach ($popular as $entry)
     $content .= make_entry_card($entry);
 $content .= '</div>';
 require_once 'pages/base.php';
