@@ -27,7 +27,8 @@ function create_view(int $user_id, int $entry_id)
  * Принимает на вход ID публикации.
  * Возвращает -1, если публикация не найдена.
  */
-function get_views_count(int $entry_id): int {
+function get_views_count(int $entry_id): int
+{
     $query = get_connection()->prepare('SELECT COUNT(*) as count FROM entry_view WHERE entry_id = ?');
     $query->bind_param('i', $entry_id);
     $query->execute();

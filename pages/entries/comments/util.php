@@ -1,6 +1,9 @@
 <?php
 require_once 'db/user/util.php';
 
+/**
+ * Эта функция генерирует HTML-карточку комментария к публикации на основе словаря с его атрибутами.
+ */
 function make_comment_card(array $comment, bool $can_delete, bool $is_author): string
 {
     $author = get_user($comment['author_id']);

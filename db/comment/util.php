@@ -1,6 +1,12 @@
 <?php
 require_once 'db/connection.php';
 
+/**
+ * Эта функция создаёт комментарий к публикации в базе данных.
+ * Принимает на вход текст комментария, ID автора и публикации, к которым будет привязан комментарий.
+ *
+ * Возвращает успешность создания вложения (true или false).
+ */
 function create_comment(int $user_id, int $entry_id, string $comment_text): bool
 {
     try {
@@ -16,6 +22,11 @@ function create_comment(int $user_id, int $entry_id, string $comment_text): bool
     }
 }
 
+/**
+ * Эта функция удаляет комментарий по его ID.
+ *
+ * Возвращает успешность выполнения удаления (true или false).
+ */
 function delete_comment(int $id): bool
 {
     try {
@@ -30,6 +41,11 @@ function delete_comment(int $id): bool
     }
 }
 
+/**
+ * Эта функция возвращает комментарий по его ID.
+ *
+ * Если комментарий не найден, возвращает null.
+ */
 function get_comment(int $id)
 {
     $query = get_connection()->prepare('SELECT * FROM entry_comment WHERE id = ?');
@@ -39,6 +55,10 @@ function get_comment(int $id)
     return $query->get_result()->fetch_assoc();
 }
 
+/**
+ * Эта функция возвращает список комментариев конкретной публикации.
+ * Принимает на вход ID публикации.
+ */
 function get_entry_comments(int $entry_id): array
 {
     $query = get_connection()->prepare('SELECT * FROM entry_comment WHERE entry_id = ? ORDER BY published');
@@ -47,6 +67,10 @@ function get_entry_comments(int $entry_id): array
     return $query->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
+/**
+ * Эта функция возвращает количество комментариев конкретной публикации.
+ * Принимает на вход ID публикации.
+ */
 function get_entry_comment_count(int $entry_id): int
 {
     $query = get_connection()->prepare('SELECT COUNT(*) AS comment_count FROM entry_comment WHERE entry_id = ?');
@@ -55,6 +79,10 @@ function get_entry_comment_count(int $entry_id): int
     return $query->get_result()->fetch_assoc()['comment_count'];
 }
 
+/**
+ * Эта функция изменяет текст комментария и автоматически обновляет дату его редактирования.
+ * Принимает на вход ID комментария и его новый текст.
+ */
 function edit_comment(int $id, string $comment_text): bool
 {
     try {

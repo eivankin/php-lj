@@ -1,4 +1,8 @@
 <?php
+/**
+ * Страница удаления комментария к публикации.
+ * Комментарии могут удалять только их авторы, администраторы и модераторы.
+ */
 require_once 'pages/util.php';
 require_once 'db/permission/built-in.php';;
 require_once 'db/comment/util.php';

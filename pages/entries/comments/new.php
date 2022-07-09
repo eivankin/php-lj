@@ -1,4 +1,9 @@
 <?php
+/**
+ * Страница создания комментариев к публикации.
+ * Только пользователи с правом на публикацию комментариев могут оставлять их.
+ */
+
 require_once 'pages/util.php';
 require_once 'pages/entries/util.php';
 require_once 'db/permission/built-in.php';
