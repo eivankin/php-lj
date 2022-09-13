@@ -40,7 +40,8 @@
                 echo '<li><a class="white" href="/account">Личный кабинет</a></li>
                 <li><a class="white" href="/logout">Выйти</a></li>';
             } else {
-                echo '<li><a class="white" href="/login">Войти</a></li>';
+                echo '<li><a class="white" href="/login">Войти</a></li>
+                    <li><a class="white" href="/register">Зарегистрироваться</a></li>';
             }
             ?>
         </ul>

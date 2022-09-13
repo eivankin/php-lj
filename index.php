@@ -42,6 +42,7 @@ session_start();
 // Здесь не перечислены URL, внутри которых передаётся ID сущности из базы данных.
 $urls = array(
     '/login' => 'pages/login.php',
+    '/register' => 'pages/register.php',
     '/account' => 'pages/account.php',
     '/logout' => 'pages/logout.php',
     '/' => 'pages/index.php',

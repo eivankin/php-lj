@@ -2,6 +2,7 @@
 require_once 'db/connection.php';
 require_once 'db/permission/util.php';
 
+const CREATION_SUCCESS_MSG = 'Аккаунт успешно создан';
 /**
  * Эта функция создаёт нового пользователя в базе данных.
  * Возвращает сообщение об успешности операции.
@@ -21,7 +22,7 @@ function create_user(string $email, string $name, string $password): string
         return 'Пользователь с таким e-mail или логином уже зарегистрирован';
     }
     get_connection()->commit();
-    return 'Аккаунт успешно создан';
+    return CREATION_SUCCESS_MSG;
 }
 
 /**

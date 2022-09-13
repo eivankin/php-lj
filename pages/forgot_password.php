@@ -36,7 +36,8 @@ const TOKEN_FORM = '
     <button type="submit">Сбросить пароль</button>
 </form class="fixed-width">';
 
-
+// Перенаправить аутентифицированного пользователя на страницу профиля
+// Сброс пароля доступен только для пользователей, не прошедших процедуру входа на сайт
 if (isset($_SESSION['user_id'])) {
     header('Location: /account');
     exit();
@@ -53,12 +54,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
             $_SESSION['restore_token'] = password_hash($token, PASSWORD_DEFAULT);
             $_SESSION['restore_id'] = $user_id;
             mail($_POST['email'], 'Восстановление пароля на сайте ' . $_SERVER['HTTP_HOST'],
-                'Для сброса пароля введите код ' . $token . ' в соответсвующей форме. ' .
+                'Для сброса пароля введите код ' . $token . ' в соответствующей форме. ' .
                 'Если вы не запрашивали сброс пароля, то проигнорируйте данное письмо.');
 
             $content = TOKEN_FORM;
         } catch (Exception $e) {
-            $message = 'Невозможно восстановить пароль, пожалуйста, свяжиетсь с администратором для сброса пароля вручную.';
+            $message = 'Невозможно восстановить пароль, пожалуйста, свяжитесь с администратором для сброса пароля вручную.';
         }
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['token']) && isset($_SESSION['restore_token'])) {
@@ -67,19 +68,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
         $content = TOKEN_FORM;
     } else {
         unset($_SESSION['restore_token']);
+        $_SESSION['token_verified'] = true;
         $content = PSWD_FORM;
     }
-} elseif (isset($_SESSION['restore_id']) && $_SERVER['REQUEST_METHOD'] == 'POST' &&
+} elseif (isset($_SESSION['restore_id']) &&isset($_SESSION['token_verified']) &&
+    $_SERVER['REQUEST_METHOD'] == 'POST' &&
     isset($_POST['password']) && isset($_POST['password2'])) {
     if ($_POST['password'] != $_POST['password2']) {
         $message = 'Пароли должны совпадать';
         $content = PSWD_FORM;
     } else {
         set_password($_SESSION['restore_id'], $_POST['password']);
-        unset($_SESSION['restore_id']);
         $message = 'Новый пароль успешно задан, вход на сайт по нему доступен';
-        mail($_POST['email'], 'Пароль на сайте ' . $_SERVER['HTTP_HOST'] . ' изменён',
+        mail(get_user($_SESSION['restore_id'])['email'], 'Пароль на сайте ' . $_SERVER['HTTP_HOST'] . ' изменён',
             'Пароль для входа на сайт был успешно изменён.');
+        unset($_SESSION['restore_id']);
+        $content = '';
     }
 } elseif (isset($_SESSION['restore_token'])) {
     $message = 'Код для сброса пароля отправлен на указанную почту';
