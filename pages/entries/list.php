@@ -101,7 +101,7 @@ $content .= "
     <div>
         <label for='order_by'>Сортировать по столбцу</label>
         <select id='order_by' name='order_by'>
-            <option>Выберите столбец</option>
+            <option value=''>Выберите столбец</option>
             <option value='published'{$selected[0]}>Дата публикации</option>
             <option value='edited'{$selected[1]}>Дата редактирования</option>
             <option value='title'{$selected[2]}>Заголовок</option>
