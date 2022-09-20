@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
 }
 
 $content = '
-<form method="post">
+<form class="fixed-width" method="post">
     <div>
         <label for="name">Название</label>
         <input type="text" name="name" id="name" required>
