@@ -23,7 +23,7 @@ $content = "
 main {display: flex; justify-content: space-around}
 </style>
 <div>
-<form style='width: 400px'>
+<form style='width: 300px'>
     <h3>Поиск публикаций</h3>
     <div>
         <label for='title'>Заголовок</label>
@@ -128,7 +128,7 @@ $content .= "
 </form>
 <a href='./new'><button>Добавить публикацию</button></a></div>
 ";
-$content .= '<table style="width: auto !important;">
+$content .= '<table style="width: auto !important; margin-left: 20px;">
     <thead>
         <tr>
             <th>№</th>
