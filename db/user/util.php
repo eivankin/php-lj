@@ -84,7 +84,8 @@ function get_user_by_email(string $email)
 /**
  * Эта функция обновляет пароль пользователя на переданный в качестве параметра.
  */
-function set_password(int $id, string $password) {
+function set_password(int $id, string $password)
+{
     $query = get_connection()->prepare('UPDATE user SET password_hash = ? WHERE id = ?');
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
     $query->bind_param('si', $password_hash, $id);
@@ -96,19 +97,29 @@ function set_password(int $id, string $password) {
  *
  * Материалы, опубликованные пользователем, удалятся автоматически на стороне базы данных.
  */
-function delete_user(int $id): bool {
+function delete_user(int $id): bool
+{
     get_connection()->begin_transaction();
     $query = get_connection()->prepare('DELETE FROM user WHERE id = ?');
     $query->bind_param('i', $id);
     $result = $query->execute();
+    $result_2 = false;
     get_connection()->commit();
-    return $result;
+    if ($result) {
+        $subscription_permission = get_permission_by_name(SUBSCRIPTION_PREFIX . $id);
+
+        if (isset($subscription_permission)) {
+            $result_2 = delete_permission($subscription_permission['id']);
+        }
+    }
+    return $result && $result_2;
 }
 
 /**
  * Эта функция обновляет атрибуты существующего пользователя.
  */
-function update_user(int $id, string $username, string $email): bool {
+function update_user(int $id, string $username, string $email): bool
+{
     get_connection()->begin_transaction();
     $query = get_connection()->prepare('UPDATE user SET username = ?, email = ? WHERE id = ?');
     $query->bind_param('ssi', $username, $email, $id);
@@ -124,7 +135,8 @@ function update_user(int $id, string $username, string $email): bool {
 /**
  * Эта функция проверяет корректность пароля пользователя по его ID.
  */
-function verify_password(int $id, string $password): bool {
+function verify_password(int $id, string $password): bool
+{
     $query = get_connection()->prepare('SELECT password_hash FROM user WHERE id = ?');
 
     $query->bind_param('i', $id);
@@ -136,6 +148,7 @@ function verify_password(int $id, string $password): bool {
 /**
  * Эта функция возвращает список всех существующих пользователей.
  */
-function get_all_users(): array {
+function get_all_users(): array
+{
     return get_connection()->query('SELECT id, username, last_login FROM user')->fetch_all(MYSQLI_ASSOC);
 }

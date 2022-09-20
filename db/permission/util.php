@@ -73,6 +73,26 @@ function remove_permission_from_user(int $user_id, int $permission_id)
     get_connection()->commit();
 }
 
+
+/**
+ * Эта функция удаляет право по его ID.
+ *
+ * Возвращает успешность удаления (true или false).
+ */
+function delete_permission(int $id): bool
+{
+    try {
+        get_connection()->begin_transaction();
+        $query = get_connection()->prepare('DELETE FROM permission WHERE id = ?');
+        $query->bind_param('i', $id);
+        $result = $query->execute();
+        get_connection()->commit();
+        return $result;
+    } catch (mysqli_sql_exception $exception) {
+        return false;
+    }
+}
+
 /**
  * Эта функция проверяет наличие хотя бы одного разрешения из списка у пользователя.
  * Принимает на вход ID пользователя и список ID разрешений.
