@@ -36,17 +36,20 @@ add_permission_to_user(2, CAN_COMMENT);
 add_permission_to_user(2, $subscription_on_admin);
 
 // Создание категорий
-create_category('Тестовая категория', null);
-create_category('Тестовая подкатегория', 1);
+create_category('Наука', null);
+create_category('Технологии', 1);
+create_category('Программирование', 2);
 
 // Создание тегов
-create_tag('Тестовый тег');
-create_tag('Второй тестовый тег');
+create_tag('PHP');
+create_tag('HTML');
+create_tag('CSS');
 
 // Создание публикаций
-echo publish(1, 'Тестовая публикация для подписчиков', 'Привет, подписчики!', 1, [1, 2], [$subscription_on_admin], []);
+echo publish(1, 'Тестовая публикация для подписчиков', 'Привет, подписчики!', 3, [1, 2, 3],
+    [$subscription_on_admin], []) . PHP_EOL;
 sleep(1); // Пауза между созданием материалов для разного времени публикации
-echo publish(2, 'Тестовая публикация для всех', 'Привет, мир!', 2, [1], [], []);
+echo publish(2, 'Тестовая публикация для всех', 'Привет, мир!', 2, [1], [], []) . PHP_EOL;
 
 // Создание просмотров публикации
 create_view(1, 1);
