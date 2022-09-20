@@ -19,7 +19,11 @@ $is_moderator = isset($_SESSION['user_id']) && has_user_permission($_SESSION['us
 
 $title = 'Публикации';
 $content = "
-<form style='width: 300px'>
+<style>
+main {display: flex; justify-content: space-around}
+</style>
+<div>
+<form style='width: 400px'>
     <h3>Поиск публикаций</h3>
     <div>
         <label for='title'>Заголовок</label>
@@ -122,9 +126,9 @@ $content .= "
     <button type='submit'>Поиск</button>
     <a href='./'><button type='button'>Сбросить фильтры</button></a>
 </form>
-<p><a href='./new'><button>Добавить публикацию</button></a></p>
+<a href='./new'><button>Добавить публикацию</button></a></div>
 ";
-$content .= '<table>
+$content .= '<table style="width: auto !important;">
     <thead>
         <tr>
             <th>№</th>
