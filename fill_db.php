@@ -7,7 +7,7 @@
 require_once 'db/connection.php';
 
 // Создание таблиц в базе данных 'blog'
-foreach (mb_split(';' . PHP_EOL, file_get_contents('create-db.sql')) as $table_query)
+foreach (mb_split(';' . PHP_EOL, file_get_contents('create_tables.sql')) as $table_query)
     get_connection()->query($table_query);
 
 require_once 'db/user/util.php';
