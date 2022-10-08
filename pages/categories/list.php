@@ -13,7 +13,7 @@ $title = 'Список категорий';
 $is_admin = isset($_SESSION['user_id']) && has_user_permission($_SESSION['user_id'], ADMIN);
 
 $content = "
-<form style='width: 300px'>
+<form style='width: 350px'>
     <h3>Сортировка категорий</h3>";
 
 $selected = ['', ''];

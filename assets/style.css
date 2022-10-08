@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;700&display=swap');
 
 :root {
-  --primary-color: #004524;
-  --secondary-color: #556832;
+    --primary-color: #004524;
+    --secondary-color: #556832;
+    --message-width: 350px;
 }
 
 body {
@@ -82,7 +83,7 @@ form > div {
 }
 
 form.fixed-width {
-    width: 250px;
+    width: var(--message-width);
     margin: 25px auto;
 }
 
@@ -111,7 +112,7 @@ form.fixed-width {
 }
 
 .fixed-width {
-    width: 250px;
+    width: var(--message-width);
     margin: 0 auto;
 }
 
