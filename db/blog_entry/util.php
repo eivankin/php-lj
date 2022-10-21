@@ -275,11 +275,13 @@ function create_attachments(array $attachments, int $entry_id): string
     try {
         if (!empty($attachments)) {
             for ($index = 0; $index < count($attachments['name']); ++$index) {
-                $upload_path = BASE_DIR . UPLOAD_DIR . basename($attachments['name'][$index]);
-                if (move_uploaded_file($attachments['tmp_name'][$index], $upload_path))
-                    create_attachment($entry_id, '/' . str_replace('\\', '/', UPLOAD_DIR . basename($attachments['name'][$index])));
-                else
-                    return "Не удалось загрузить файл {$attachments['name'][$index]}. Возможно, превышен максимальный размер файла.";
+                if (!empty($attachments['name'][$index])) {
+                    $upload_path = BASE_DIR . UPLOAD_DIR . basename($attachments['name'][$index]);
+                    if (move_uploaded_file($attachments['tmp_name'][$index], $upload_path))
+                        create_attachment($entry_id, '/' . str_replace('\\', '/', UPLOAD_DIR . basename($attachments['name'][$index])));
+                    else
+                        return "Не удалось загрузить файл {$attachments['name'][$index]}. Возможно, превышен максимальный размер файла.";
+                }
             }
         }
     } catch (mysqli_sql_exception $exception) {

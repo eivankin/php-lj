@@ -101,6 +101,8 @@ function has_any_permission($user_id, array $permission_ids): bool
 {
     if (empty($user_id))
         return false;
+    if (count($permission_ids) == 0)
+        return true;
     $values = str_repeat('?,', count($permission_ids) - 1) . '?';
     $query = get_connection()->prepare("SELECT * FROM user_to_permission WHERE user_id = ? AND permission_id IN ({$values})");
     $query->bind_param('i' . str_repeat('i', count($permission_ids)), $user_id, ...$permission_ids);
